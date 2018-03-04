@@ -1,4 +1,4 @@
-.medium-editor-table-builder-cell{
+.jt-grid--cell{
   width: 16px;
   height: 16px;
   background: aliceblue;
@@ -8,10 +8,10 @@
   border: 1px solid black;
 }
 
-.medium-editor-table-builder-cell.active{
+.jt-grid--cell.active{
   background: green;
 }
 
-#hasTable th {
+th {
 
 }
