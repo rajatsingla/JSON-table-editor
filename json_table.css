@@ -1,0 +1,17 @@
+.medium-editor-table-builder-cell{
+  width: 16px;
+  height: 16px;
+  background: aliceblue;
+  display: block;
+  float: left;
+  box-sizing: border-box;
+  border: 1px solid black;
+}
+
+.medium-editor-table-builder-cell.active{
+  background: green;
+}
+
+#hasTable th {
+
+}
