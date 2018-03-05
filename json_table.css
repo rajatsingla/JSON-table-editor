@@ -36,3 +36,14 @@ table.js-main-table td {
     text-align: right;
     width: 80%;
 }
+
+td.jt-cell-italic {
+    font-style: italic;
+}
+
+.jt-cell-large-font {
+    font-size: x-large;
+}
+.jt-cell-bold {
+    font-weight: bold;
+}
