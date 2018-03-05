@@ -129,6 +129,7 @@
     JSONTableView.prototype = {
         init: function (container, formatButtons) {
             this.table = document.createElement("table");
+            this.table.setAttribute("class", "js-main-table");
             this.cellTag = "td";
             this.container = container;
             this.formatButtons = formatButtons;

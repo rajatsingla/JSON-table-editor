@@ -7,11 +7,18 @@
   <h1> Hello to json table </h1>
 
   <div class="editable" id="editable"></div>
+  <br/><br/><br/><br/><br/><br/><br/><br/>
+  <button onclick="logData()"> Show Data </button>
+  <div> Will log data in console, open console</div>
 
   <script type="text/javascript" src="./json_table.js"></script>
 
   <script type="text/javascript" charset="utf-8">
       var table = new JSONTable("#editable");
+
+      var logData = function () {
+          console.log(table.model.data);
+      }
   </script>
 </body>
 </html>

@@ -1,17 +1,38 @@
-.jt-grid--cell{
-  width: 16px;
-  height: 16px;
-  background: aliceblue;
-  display: block;
-  float: left;
-  box-sizing: border-box;
-  border: 1px solid black;
+.jt-grid--cell {
+    width: 16px;
+    height: 16px;
+    background: aliceblue;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    border: 1px solid black;
 }
 
-.jt-grid--cell.active{
-  background: green;
+.jt-grid--cell.active {
+    background: green;
 }
 
-th {
+table.js-main-table {
+    width: 80%;
+    margin: 10px 0;
+    border-collapse: collapse;
+}
 
+table.js-main-table td {
+    border: 1px dashed #e3e3e3;
+    height: 30px;
+}
+
+.jt-format-btn button, .jt-col-btn button, .jt-row-btn button {
+    margin: 3px;
+    font-size: 13px;
+}
+
+.jt-format-btn button.active, .jt-col-btn button.active, .jt-row-btn button.active {
+    background: blue;
+}
+
+.jt-col-btn, .jt-row-btn {
+    text-align: right;
+    width: 80%;
 }
