@@ -2,23 +2,24 @@
 <html>
 <head>
   <link rel="stylesheet" href="./json_table.css" />
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 </head>
 <body>
   <h1> Hello to json table </h1>
 
   <div class="editable" id="editable"></div>
-  <br/><br/><br/><br/><br/><br/><br/><br/>
-  <button onclick="logData()"> Show Data </button>
-  <div> Will log data in console, open console</div>
+  <br/><br/>
+
+  <div> Data</div>
+  <pre id="prettyprint" class="prettyprint lang-json"></pre>
 
   <script type="text/javascript" src="./json_table.js"></script>
+
 
   <script type="text/javascript" charset="utf-8">
       var table = new JSONTable("#editable");
 
-      var logData = function () {
-          console.log(table.model.data);
-      }
+      table.view.container.addEventListener('data_changed',function(){document.getElementById('prettyprint').innerHTML=JSON.stringify(table.model.table_data,undefined,2)})
   </script>
 </body>
 </html>

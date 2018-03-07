@@ -10,26 +10,26 @@
 
     Grid.prototype = {
         init: function (el, callback, rows, columns) {
-            this._root = el;
-            this._callback = callback;
+            this.root = el;
+            this.callback = callback;
             this.rows = rows;
             this.columns = columns;
-            return this._render();
+            return this.render();
         },
 
         setCurrentCell: function (cell) {
-            this._currentCell = cell;
+            this.currentCell = cell;
         },
 
         markCells: function () {
-            [].forEach.call(this._cellsElements, function (el) {
+            [].forEach.call(this.cellsElements, function (el) {
                 var cell = {
                         column: parseInt(el.dataset.column, 10),
                         row: parseInt(el.dataset.row, 10)
                     },
-                    active = this._currentCell &&
-                             cell.row <= this._currentCell.row &&
-                             cell.column <= this._currentCell.column;
+                    active = this.currentCell &&
+                             cell.row <= this.currentCell.row &&
+                             cell.column <= this.currentCell.column;
 
                 if (active === true) {
                     el.classList.add('active');
@@ -39,10 +39,10 @@
             }.bind(this));
         },
 
-        _generateCells: function () {
+        generateCells: function () {
             var row = -1;
 
-            this._cells = [];
+            this.cells = [];
 
             for (var i = 0; i < this.rows * this.columns; i++) {
                 var column = i % this.columns;
@@ -51,7 +51,7 @@
                     row++;
                 }
 
-                this._cells.push({
+                this.cells.push({
                     column: column,
                     row: row,
                     active: false
@@ -59,19 +59,19 @@
             }
         },
 
-        _html: function () {
+        html: function () {
             var width = this.columns * COLUMN_WIDTH + BORDER_WIDTH * 2,
                 height = this.rows * COLUMN_WIDTH + BORDER_WIDTH * 2,
                 html = '<div class="jt-grid clearfix" style="width:' + width + 'px;height:' + height + 'px;">';
-            html += this._cellsHTML();
+            html += this.cellsHTML();
             html += '</div>';
             return html;
         },
 
-        _cellsHTML: function () {
+        cellsHTML: function () {
             var html = '';
-            this._generateCells();
-            this._cells.map(function (cell) {
+            this.generateCells();
+            this.cells.map(function (cell) {
                 html += '<a href="#" class="jt-grid--cell' +
                         (cell.active === true ? ' active' : '') +
                         '" ' + 'data-row="' + cell.row +
@@ -81,20 +81,20 @@
             return html;
         },
 
-        _render: function () {
-            this._root.innerHTML = this._html();
-            this._cellsElements = this._root.querySelectorAll('a');
-            this._bindEvents();
+        render: function () {
+            this.root.innerHTML = this.html();
+            this.cellsElements = this.root.querySelectorAll('a');
+            this.bindEvents();
         },
 
-        _bindEvents: function () {
-            [].forEach.call(this._cellsElements, function (el) {
-                this._onMouseEnter(el);
-                this._onClick(el);
+        bindEvents: function () {
+            [].forEach.call(this.cellsElements, function (el) {
+                this.onMouseEnter(el);
+                this.onClick(el);
             }.bind(this));
         },
 
-        _onMouseEnter: function (el) {
+        onMouseEnter: function (el) {
             var self = this,
                 timer;
 
@@ -104,7 +104,7 @@
                 var dataset = this.dataset;
 
                 timer = setTimeout(function () {
-                    self._currentCell = {
+                    self.currentCell = {
                         column: parseInt(dataset.column, 10),
                         row: parseInt(dataset.row, 10)
                     };
@@ -113,27 +113,27 @@
             });
         },
 
-        _onClick: function (el) {
+        onClick: function (el) {
             var self = this;
             el.addEventListener('click', function (e) {
                 e.preventDefault();
-                self._callback(this.dataset.row, this.dataset.column);
+                self.callback(this.dataset.row, this.dataset.column);
             });
         }
     };
 
-    function JSONTableView(container, formatButtons) {
-        return this.init(container, formatButtons);
+    function JSONTableView(container, formatOptions) {
+        return this.init(container, formatOptions);
     }
 
     JSONTableView.prototype = {
-        init: function (container, formatButtons) {
+        init: function (container, formatOptions) {
             this.table = document.createElement("table");
             this.table.setAttribute("class", "js-main-table");
             this.cellTag = "td";
             this.container = container;
-            this.formatButtons = formatButtons;
-            this.formatBtnId = "jt-format-btn";
+            this.formatOptions = formatOptions;
+            this.formatOptionsId = "jt-format-options";
             this.colBtnId = "jt-col-btn";
             this.rowBtnId = "jt-row-btn";
         },
@@ -145,88 +145,120 @@
             } else {
                 container.append(this.table);
             }
-            container.insertAdjacentHTML('afterbegin', this._formatButtonsContainer());
-            this.updateFormatButtons();
-            container.insertAdjacentHTML('beforeend', this._utilButtons());
+            container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer());
+            this.updateFormatOptions();
+            container.insertAdjacentHTML('beforeend', this.utilButtons());
         },
 
         update: function (model) {
-            this.table.innerHTML = this._html(model.rows, model.columns, model.data);
+            this.table.innerHTML = this.html(model.meta.rows, model.meta.columns, model.data);
             if (model.currentCell) {
-                this._focusCurrentCell(model.currentCell);
+                this.focusCurrentCell(model.currentCell);
             }
             return true;
         },
 
-        updateFormatButtons: function (currentCellFormat) {
-            var btnContainer = JSONTable.qs("#" + this.formatBtnId, this.container),
-                html = "";
-            for (var i = 0; i < this.formatButtons.length; i++) {
+        updateFormatOptions: function (currentCellFormat) {
+            var optionsContainer = JSONTable.qs("#" + this.formatOptionsId, this.container);
+            optionsContainer.innerHTML = this.formatButtons(currentCellFormat) + this.formatRadioButtons(currentCellFormat);
+        },
+
+        formatRadioButtons: function (currentCellFormat) {
+            var html = "",
+                radioButtons = this.formatOptions.filter(function(a){return a.type == "radio" });
+            for (var i = 0; i < radioButtons.length; i++) {
+                html += '<span>';
+                for (var j = 0; j < radioButtons[i].options.length; j++) {
+                    var option = radioButtons[i].options[j];
+                    html += '<button data-code="5" data-formatkey="'
+                    + radioButtons[i].name
+                    + '" data-val="'
+                    + option
+                    + '" title="'
+                    + option + ' ' + radioButtons[i].name
+                    + '" class="'
+                    + (currentCellFormat && currentCellFormat[radioButtons[i].name] === option ? ' active' : '')
+                    + '"'
+                    + (currentCellFormat ? ' ' : ' disabled')
+                    + '>'
+                    + option
+                    + '</button>';
+                }
+                html += '</span>';
+            }
+            return html;
+        },
+
+        formatButtons: function (currentCellFormat) {
+            var html = "",
+                formatButtons = this.formatOptions.filter(function(a){return a.type == "button" });
+            for (var i = 0; i < formatButtons.length; i++) {
                 html += '<button data-code="5" data-formatkey="'
-                + this.formatButtons[i]
+                + formatButtons[i].name
                 + '" class="'
-                + (currentCellFormat && currentCellFormat[this.formatButtons[i]] ? ' active' : '')
+                + (currentCellFormat && currentCellFormat[formatButtons[i].name] ? ' active' : '')
                 + '"'
                 + (currentCellFormat ? ' ' : ' disabled')
                 + '>'
-                + this.formatButtons[i]
+                + formatButtons[i].innerHTML
                 + '</button>';
             }
-            btnContainer.innerHTML = html;
+            return html;
         },
 
-        _focusCurrentCell: function (currentCell) {
+        focusCurrentCell: function (currentCell) {
             var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']",
                 cell = JSONTable.qs(selector, this.container);
             if (cell) {
                 cell.focus();
+                setTimeout(function(){JSONTable.setEndOfContenteditable(cell)},0);
             }
         },
 
-        _formatButtonsContainer: function () {
-            var html = '<div class="jt-format-btn" id="' + this.formatBtnId + '">';
+        formatOptionsContainer: function () {
+            var html = '<div class="jt-format-options" id="' + this.formatOptionsId + '">';
             html += '</div>';
             return html;
         },
 
-        _utilButtons: function () {
+        utilButtons: function () {
             var html
-            = '<div class="jt-col-btn" id="' + this.colBtnId + '">'
-            +      '<button data-code="1">add a column</button>'
-            +      '<button data-code="2">remove a column</button>'
+            = '<div class="jt-row-btn" id="' + this.rowBtnId + '">'
+            +     '<button data-code="3" title="add a row">+</button>'
+            +     '<button data-code="4" title="remove a row">-</button>'
             + '</div>'
 
-            + '<div class="jt-row-btn" id="' + this.rowBtnId + '">'
-            +     '<button data-code="3">add a row</button>'
-            +     '<button data-code="4">remove a row</button>'
+            + '<div class="jt-col-btn" id="' + this.colBtnId + '">'
+            +      '<button data-code="1" title="add a column">+</button>'
+            +      '<button data-code="2" title="remove a column">-</button>'
             + '</div>';
 
             return html;
         },
 
-        _html: function (rows, columns, data) {
+        html: function (rows, columns, data) {
             var html = "";
             for (var i = 0; i < rows; i++) {
                 html += "<tr>";
                 for (var j = 0; j < columns; j++) {
-                    html += this._cell(i, j, data[i][j]);
+                    html += this.cell(i, j, data[i][j]);
                 }
                 html += "</tr>";
             }
             return html;
         },
 
-        _cell: function (i, j, data) {
+        cell: function (i, j, data) {
             var html = "";
             html += "<" + this.cellTag + " contenteditable";
             html += " data-row='" + i + "'";
             html += " data-col='" + j + "'";
-            html += " class='" + this._cellClassList(data.format) + "'";
+            html += " class='" + this.cellClassList(data.format) + "'";
             html += ">" + data.content + "</" + this.cellTag + ">";
             return html;
         },
 
-        _cellClassList: function (format) {
+        cellClassList: function (format) {
           var classList = "";
           if (format && typeof format === "object") {
               for (var property in format) {
@@ -239,16 +271,19 @@
         }
     };
 
-    function JSONTableModel(data) {
-        return this.init(data);
+    function JSONTableModel(table_data) {
+        return this.init(table_data);
     }
 
     JSONTableModel.prototype = {
-        init: function (data) {
-            this.data = data || [];
-            this.rows = null;
-            this.columns = null;
+        init: function (table_data) {
+            this.table_data = table_data || { meta: {}, data: [] };
+            this.meta = this.table_data.meta;
+            this.data = this.table_data.data;
+            this.meta.rows = null;
+            this.meta.columns = null;
             this.currentCell = null;
+            this.data_changed_event = new Event('data_changed');
         },
 
         isValidData: function () {
@@ -259,12 +294,12 @@
         },
 
         setRowCol: function () {
-            this._setRowCol(this.data.length, this.data[0].length);
+            this.setRowCol(this.data.length, this.data[0].length);
         },
 
         setDefaultData: function (rows, columns) {
-            this._setRowCol(rows,columns);
-            this._updateDataAddRemoveExtraRowColumn();
+            this.setRowCol(rows,columns);
+            this.updateDataAddRemoveExtraRowColumn();
         },
 
         setCurrentCell: function (cell) {
@@ -278,54 +313,58 @@
         },
 
         addARow: function () {
-            this.rows += 1;
-            this._updateDataAddRemoveExtraRowColumn();
+            this.meta.rows += 1;
+            this.updateDataAddRemoveExtraRowColumn();
         },
 
         removeARow: function () {
-            if (this.rows > 1) {
-                this.rows -= 1;
-                this._updateDataAddRemoveExtraRowColumn();
+            if (this.meta.rows > 1) {
+                this.meta.rows -= 1;
+                this.updateDataAddRemoveExtraRowColumn();
             }
         },
 
         addAColumn: function () {
-            this.columns += 1;
-            this._updateDataAddRemoveExtraRowColumn();
+            this.meta.columns += 1;
+            this.updateDataAddRemoveExtraRowColumn();
         },
 
         removeAColumn: function () {
-            if (this.columns > 1) {
-                this.columns -= 1;
-                this._updateDataAddRemoveExtraRowColumn();
+            if (this.meta.columns > 1) {
+                this.meta.columns -= 1;
+                this.updateDataAddRemoveExtraRowColumn();
             }
         },
 
-        updateFormatOfCurrentCell: function (formatkey) {
+        updateFormatOfCurrentCell: function (formatkey, event) {
             var currentCell = this.currentCell;
-            if (currentCell) {
+            if (currentCell && event.target.dataset.val) {
+                this.data[currentCell.row][currentCell.col].format[formatkey] = event.target.dataset.val;
+            } else if (currentCell) {
                 var format = this.data[currentCell.row][currentCell.col].format;
                 this.data[currentCell.row][currentCell.col].format[formatkey] = !format[formatkey];
             }
         },
 
-        _updateDataAddRemoveExtraRowColumn: function () {
-            while (this.data.length != this.rows) {
-                if (this.data.length > this.rows) {
+        updateDataAddRemoveExtraRowColumn: function () {
+            var rows = this.meta.rows,
+                columns = this.meta.columns;
+            while (this.data.length != rows) {
+                if (this.data.length > rows) {
                     this.data.pop();
-                } else if (this.data.length < this.rows) {
+                } else if (this.data.length < rows) {
                     this.data.push([]);
                 } else {
                     break;
                 }
             }
 
-            for (var i = 0; i < this.rows; i++) {
-                while (this.data[i].length != this.columns) {
-                    if (this.data[i].length > this.columns) {
+            for (var i = 0; i < rows; i++) {
+                while (this.data[i].length != columns) {
+                    if (this.data[i].length > columns) {
                         this.data[i].pop();
-                    } else if (this.data[i].length < this.columns) {
-                        this.data[i].push(this._defaultCellData());
+                    } else if (this.data[i].length < columns) {
+                        this.data[i].push(this.defaultCellData());
                     } else {
                         break;
                     }
@@ -333,14 +372,14 @@
             }
         },
 
-        _setRowCol: function (rows, columns) {
+        setRowCol: function (rows, columns) {
             rows = Number(rows);
             columns = Number(columns);
-            this.rows = rows;
-            this.columns = columns;
+            this.meta.rows = rows;
+            this.meta.columns = columns;
         },
 
-        _defaultCellData: function () {
+        defaultCellData: function () {
             var data = {};
             data.content = "";
             data.format = {};
@@ -360,52 +399,58 @@
 
         bindEvents: function () {
             var self = this;
-            this._bindEventOnCell("focus", function(e) {
-                self._handleCellFocus(e);
+            this.bindEventOnCell("focus", function(e) {
+                self.handleCellFocus(e);
             });
-            this._bindEventOnCell("blur", function(e) {
-                self._handleCellBlur(e);
+            this.bindEventOnCell("blur", function(e) {
+                self.handleCellBlur(e);
             });
-            this._bindEventOnBtn();
+            this.bindEventOnFormatingOptions();
         },
 
-        _bindEventOnCell: function (type, handler) {
+        bindEventOnCell: function (type, handler) {
             JSONTable.delegate(this.view.table, this.view.cellTag, type, handler);
         },
 
-        _bindEventOnBtn: function () {
+        bindEventOnFormatingOptions: function () {
             var self = this;
-            var btnIds = [this.view.formatBtnId, this.view.rowBtnId, this.view.colBtnId];
+            var btnIds = [this.view.formatOptionsId, this.view.rowBtnId, this.view.colBtnId];
             for (var i = 0; i < btnIds.length; i++) {
                 JSONTable.delegate(
                     JSONTable.qs("#" + btnIds[i], this.view.container),
                     "button",
                     "click",
                     function(e){
-                        self._handleBtnClick(e);
+                        self.handleBtnClick(e);
                     }
                 );
             }
         },
 
-        _handleCellFocus: function (event) {
+        handleCellFocus: function (event) {
             var self = this;
             this.model.setCurrentCell(event.target.dataset);
             setTimeout(function () {
-                self.view.updateFormatButtons(self.model.data[event.target.dataset.row][event.target.dataset.col].format);
+                self.view.updateFormatOptions(self.model.data[event.target.dataset.row][event.target.dataset.col].format);
             },11);
 
         },
 
-        _handleCellBlur: function (event) {
+        handleCellBlur: function (event) {
             var self = this;
             this.model.updateContent(event);
+            this.view.container.dispatchEvent(this.model.data_changed_event);
             setTimeout(function () {
-                self.view.updateFormatButtons();
-            },10);
+                if (self.blur_created_by_button_click) {
+                    self.blur_created_by_button_click = false;
+                } else {
+                    self.view.updateFormatOptions();
+                }
+            },9);
         },
 
-        _handleBtnClick: function (event) {
+        handleBtnClick: function (event) {
+            this.blur_created_by_button_click = true;
             event.preventDefault();
             event.stopPropagation();
             var dataset = event.target.dataset;
@@ -418,42 +463,59 @@
             } else if (dataset.code == 4) {
                 this.model.removeARow();
             } else if (dataset.code == 5) {
-                this.model.updateFormatOfCurrentCell(dataset.formatkey);
+                this.model.updateFormatOfCurrentCell(dataset.formatkey, event);
             }
+
+            this.view.container.dispatchEvent(this.model.data_changed_event);
 
             this.view.update(this.model);
         }
     };
 
-    function JSONTable(selector, data) {
-        return this.init(selector, data);
+    function JSONTable(selector, table_data) {
+        return this.init(selector, table_data);
     }
 
     JSONTable.prototype = {
-        init: function (selector, data, options) {
+        init: function (selector, table_data, options) {
             if (!options || typeof options !== 'object') {
                 options = {};
             }
             this.gridRows = options.gridRows || 10;
             this.gridColumns = options.gridColumns || 10;
-            this.formatButtons = options.formatButtons || ['bold', 'italic', 'large font'];
+            this.formatOptions = options.formatOptions || [{
+                  type: 'button',
+                  name: 'bold',
+                  innerHTML: 'Bold'
+                },
+                {
+                  type: 'button',
+                  name: 'italic',
+                  innerHTML: 'Italic'
+                },
+                {
+                  type: 'radio',
+                  name: 'align',
+                  options: ['left', 'right', 'center']
+                }
+              ];
             this.container = JSONTable.qs(selector);
-            this.model = new JSONTableModel(data);
-            this.view = new JSONTableView(this.container, this.formatButtons);
+            this.model = new JSONTableModel(table_data);
+            this.view = new JSONTableView(this.container, this.formatOptions);
             this.controller = new JSONTableController(this.view, this.model);
-            this._setupTable();
+            this.setupTable();
         },
 
-        _setupTable: function () {
+        setupTable: function () {
             if (this.model.isValidData()) {
                 this.model.setRowCol();
-                this._initTable();
+                this.initTable();
             } else {
                 this.grid =
                     new Grid(this.container,
                         function (row, column) {
                             this.model.setDefaultData(Number(row) + 1, Number(column) + 1);
-                            this._initTable();
+                            this.initTable();
                         }.bind(this),
                         this.gridRows,
                         this.gridColumns
@@ -461,7 +523,7 @@
             }
         },
 
-        _initTable: function () {
+        initTable: function () {
             this.view.insert();
             this.view.update(this.model);
             this.controller.bindEvents();
@@ -494,6 +556,27 @@
         // https://developer.mozilla.org/en-US/docs/Web/Events/blur
         var useCapture = type === 'blur' || type === 'focus';
         JSONTable.on(target, type, dispatchEvent, useCapture);
+    }
+
+    // https://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
+    JSONTable.setEndOfContenteditable = function (contentEditableElement) {
+        var range,selection;
+        if(document.createRange)
+        {
+            range = document.createRange();
+            range.selectNodeContents(contentEditableElement);
+            range.collapse(false);
+            selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+        else if(document.selection)
+        {
+            range = document.body.createTextRange();
+            range.moveToElementText(contentEditableElement);
+            range.collapse(false);
+            range.select();
+        }
     }
 
     window.JSONTable = JSONTable;
