@@ -70,3 +70,14 @@ table.js-main-table td {
     position: relative;
     top: -45px;
 }
+
+td.jt-cell-italic {
+    font-style: italic;
+}
+
+.jt-cell-large-font {
+    font-size: x-large;
+}
+.jt-cell-bold {
+    font-weight: bold;
+}

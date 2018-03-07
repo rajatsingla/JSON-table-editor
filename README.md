@@ -45,3 +45,11 @@ formatButtons list can consist of any string w/o spaces, use your imagination.
   ...
 ]
 ```
+
+### TODOS
+* Update readme
+* Convert this into npm package
+* Fix CSS
+* Fix bugs
+* Add additional features, if any
+
