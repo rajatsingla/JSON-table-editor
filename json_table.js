@@ -263,7 +263,12 @@
           if (format && typeof format === "object") {
               for (var property in format) {
                   if (format.hasOwnProperty(property) && format[property]) {
-                      classList += "jt-cell-" + property.replace(/ /g, "-") + " ";
+                      if (format[property] !== "true" && format[property] !== true){
+                          //case of radio buttons
+                          classList += "jt-cell-" + format[property].replace(/ /g, "-") + " ";
+                      } else {
+                          classList += "jt-cell-" + property.replace(/ /g, "-") + " ";
+                      }
                   }
               }
           }
@@ -496,7 +501,7 @@
                 {
                   type: 'radio',
                   name: 'align',
-                  options: ['left', 'right', 'center']
+                  options: ['left', 'center', 'right']
                 }
               ];
             this.container = JSONTable.qs(selector);

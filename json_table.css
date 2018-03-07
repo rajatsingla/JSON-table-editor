@@ -1,3 +1,4 @@
+/* GRID CSS  */
 .jt-grid--cell {
     width: 16px;
     height: 16px;
@@ -12,6 +13,7 @@
     background: #9b9b9b;
 }
 
+/* TABLE CSS  */
 table.js-main-table {
     width: calc(100% - 68px);
     margin: 10px 0;
@@ -27,6 +29,7 @@ table.js-main-table td {
     padding-right: 5px;
 }
 
+/* TABLE BUTTON CSS  */
 .jt-format-options button, .jt-col-btn button, .jt-row-btn button {
     margin: 4px;
     font-size: 16px;
@@ -71,6 +74,7 @@ table.js-main-table td {
     top: -45px;
 }
 
+/* CELL FORMATING CSS  */
 td.jt-cell-italic {
     font-style: italic;
 }
@@ -80,4 +84,20 @@ td.jt-cell-italic {
 }
 .jt-cell-bold {
     font-weight: bold;
+}
+
+.jt-cell-bold {
+    font-weight: bold;
+}
+
+.jt-cell-left {
+    text-align: left;
+}
+
+.jt-cell-right {
+    text-align: right;
+}
+
+.jt-cell-center {
+    text-align: center;
 }
