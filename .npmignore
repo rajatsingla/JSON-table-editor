@@ -6,3 +6,4 @@ index.html
 .gitignore
 .travis.yml
 bower.json
+spec/

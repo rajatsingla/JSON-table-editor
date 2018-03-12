@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.",
   "main": [
-      "dist/json-table.css",
-      "dist/json-table.js",
-      "dist/json-table.min.css",
-      "dist/json-table.min.js"
+    "dist/json-table.css",
+    "dist/json-table.js",
+    "dist/json-table.min.css",
+    "dist/json-table.min.js"
   ],
   "scripts": {
-    "test": "npm run test"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-version-filename": "^1.0.2",
+    "jasmine": "^3.1.0",
     "shelljs": "^0.8.1"
   }
 }

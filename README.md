@@ -1,6 +1,14 @@
 ## JSON Editable Table
 JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
 
+## Build status
+[![Build Status](https://travis-ci.org/rajatsingla/JSON-table.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table)
+
+## Code style
+Using Standard code style.
+
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+
 ## Demo
 [https://rajatsingla.github.io/JSON-table/](https://rajatsingla.github.io/JSON-table/)
 
@@ -23,14 +31,6 @@ You can -
 **USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
 
-## Build status
-[![Build Status](https://travis-ci.org/rajatsingla/JSON-table.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table)
-
-## Code style
-Using Standard code style.
-
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
-
 ## Tech/framework used
 Built With vanillaJS (ES5)
 
@@ -46,7 +46,7 @@ Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JS
 
 #### Link the javascript file
 `<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`        
-    
+
 `<link rel="stylesheet" href="bower_components/json-table/dist/json-table.min.css" />`               
 Note: If you didn’t install using Bower, you need to adjust the path of the JS and CSS file to match your file structure.
 
@@ -220,8 +220,11 @@ You can add multiple select boxes , use your imagination.
 
 [How to pass formatOptions](https://github.com/rajatsingla/JSON-table#examples-of-options-object)
 
+## Test
+`npm test`
+
 ## Contribute
-* Fork this project.
+* Fork this project
 * Make changes in src/.js or src/.css
 * Run `gulp build`
 * Generate a PR

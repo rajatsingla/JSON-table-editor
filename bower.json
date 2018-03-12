@@ -32,6 +32,7 @@
     ".gitignore",
     ".npmignore",
     ".nojekyll",
-    ".travis.yml"
+    ".travis.yml",
+    "spec"
   ]
 }
