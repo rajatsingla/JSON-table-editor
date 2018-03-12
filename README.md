@@ -43,15 +43,15 @@ Also, you can download it using npm.
 Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table), extract it, and copy  dist/json-table.min.js into your project’s folder.
 
 #### Link the javascript file
-`<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`
-`<link rel="stylesheet" href="bower_components/json-table/dist/json-table.min.css" />`
+`<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`            
+`<link rel="stylesheet" href="bower_components/json-table/dist/json-table.min.css" />`               
 Note: If you didn’t install using Bower, you need to adjust the path of the JS and CSS file to match your file structure.
 
 #### Initialize the table
 `table = new JSONTable(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`
 
 Example:-
-`<div id="foobar"></div>`
+`<div id="foobar"></div>`                
 `table = new JSONTable("#foobar")`
 
 ## Get Data
@@ -67,17 +67,17 @@ table.view.container.addEventListener('data_changed',function(){
 ## Options Object
 Options Object can have following keys
 
-* gridRows
-For defining default rows in grid.
+* **gridRows**
+For defining default rows in grid.             
 Default value is 10
 
-* gridColumns
-For defining default columns in grid.
+* **gridColumns**
+For defining default columns in grid.            
 Default value is 10
 
-* formatOptions
-For defining format buttons on editor, like bold, underline etc.
-More info on [formatOptions]()
+* **formatOptions**
+For defining format buttons on editor, like bold, underline etc.           
+More info on [formatOptions](https://github.com/rajatsingla/JSON-table#more-info-on-formatOptions)            
 Default value is
 ```js
 [
@@ -99,9 +99,9 @@ Default value is
 ]
 ```
 
-* metaFields
-Meta Fields for each table like name, description etc.
-More info on [metaFields]()
+* **metaFields**
+Meta Fields for each table like name, description etc.                
+More info on [metaFields](https://github.com/rajatsingla/JSON-table#more-info-on-metafields)                   
 Default value is
 ```js
 [
@@ -147,7 +147,7 @@ table = new JSONTable("#foobar", {
 ```
 
 ## More info on formatOptions
-`formatOptions` is an object which determines the buttons for formatting each cell.
+`formatOptions` is an object which determines the buttons for formatting each cell.            
 There can be two types of formatOptions
 1. `button`
 ```js
@@ -178,7 +178,7 @@ If `center` is active it will add `center` to active cell's format data under ke
 You can add multiple radio types and any number of options based on your format need, use your imagination.                  
 If `center` is active it will also add a class named `jt-cell-center` to active cell.                   
 CSS for some of the classes is written, if you use some other options you may have to write css for that class.                          
-[How to pass formatOptions]()
+[How to pass formatOptions](https://github.com/rajatsingla/JSON-table#examples-of-options-object)
 
 
 ## More info on metaFields
@@ -215,21 +215,13 @@ You can add multiple integer type fields , use your imagination.
 This will add a select box with options and title `Is this Table Ok` and its value will be added in table meta.            
 You can add multiple select boxes , use your imagination.          
 
-[How to pass formatOptions]()
-
-
-## Tests
-
+[How to pass formatOptions](https://github.com/rajatsingla/JSON-table#examples-of-options-object)
 
 ## Contribute
-
+* Fork this project.
+* Make changes in src/.js or src/.css
+* Run `gulp build`
+* Generate a PR
 
 ## License
 LICENSE (MIT)
-
-
-
-### TODOS
-* Update readme
-* Convert this into npm package
-* Add additional features, if any
