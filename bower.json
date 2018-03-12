@@ -1,0 +1,37 @@
+{
+  "name": "json-table",
+  "version": "v1.0.0",
+  "description": "JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.",
+  "main": [
+      "dist/json-table.css",
+      "dist/json-table.js",
+      "dist/json-table.min.css",
+      "dist/json-table.min.js"
+  ],
+  "authors": [
+    "rajat singla"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "html",
+    "table",
+    "editor",
+    "JSON",
+    "json-table",
+    "editable"
+  ],
+  "homepage": "https://github.com/rajatsingla/JSON-table",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "index.html",
+    "src",
+    "tests",
+    ".gitignore",
+    ".npmignore",
+    ".nojekyll",
+    ".travis.yml"
+  ]
+}

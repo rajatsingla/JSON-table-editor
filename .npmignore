@@ -1,0 +1,8 @@
+npm-debug.log
+.DS_Store
+node_modules/
+bower_components/
+index.html
+.gitignore
+.travis.yml
+bower.json

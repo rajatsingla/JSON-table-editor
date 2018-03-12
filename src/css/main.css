@@ -1,0 +1,103 @@
+/* GRID CSS  */
+.jt-grid--cell {
+    width: 16px;
+    height: 16px;
+    background: rgba(155, 155, 155, 0.1);
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    border: 1px solid #312828;
+}
+
+.jt-grid--cell.active {
+    background: #9b9b9b;
+}
+
+/* TABLE CSS  */
+table.js-main-table {
+    width: calc(100% - 68px);
+    margin: 10px 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+table.js-main-table td {
+    border: 1px solid black;
+    height: 30px;
+    outline: none;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* TABLE BUTTON CSS  */
+.jt-format-options button, .jt-col-btn button, .jt-row-btn button {
+    margin: 4px;
+    font-size: 16px;
+    border: 1px solid #e2e2e2;
+    color: black;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 4px 7px;
+    box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.11);
+    transition: .5s all;
+    text-transform: capitalize;
+}
+
+.jt-format-options button:hover, .jt-col-btn button:hover, .jt-row-btn button:hover{
+    background: rgba(224, 224, 224, 0.5);
+}
+
+.jt-format-options button:disabled, .jt-format-options button[disabled]{
+    opacity: .4;
+}
+
+.jt-format-options span{
+    padding-left: 20px;
+}
+
+.jt-format-options span button{
+    margin-left: -4px;
+    border-radius: 0;
+}
+
+.jt-format-options button.active, .jt-col-btn button.active, .jt-row-btn button.active {
+    background: #e0e0e0;
+}
+
+.jt-col-btn, .jt-row-btn {
+    display: inline;
+    float: right;
+}
+
+.jt-row-btn {
+    position: relative;
+    top: -45px;
+}
+
+/* CELL FORMATING CSS  */
+td.jt-cell-italic {
+    font-style: italic;
+}
+
+.jt-cell-large-font {
+    font-size: x-large;
+}
+.jt-cell-bold {
+    font-weight: bold;
+}
+
+.jt-cell-bold {
+    font-weight: bold;
+}
+
+.jt-cell-left {
+    text-align: left;
+}
+
+.jt-cell-right {
+    text-align: right;
+}
+
+.jt-cell-center {
+    text-align: center;
+}
