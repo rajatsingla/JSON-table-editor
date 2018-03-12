@@ -1,6 +1,12 @@
 ## JSON Editable Table
 JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
 
+## Demo
+[https://rajatsingla.github.io/JSON-table/](https://rajatsingla.github.io/JSON-table/)
+
+## Screenshot
+![Screen Cast](https://media.giphy.com/media/fxq5c5vwZErxoESC7Q/giphy.gif)
+
 ## Features
 It is **not** meant to be a viewer for large spreadsheet data.
 
@@ -9,14 +15,13 @@ It is intended to maintain HTML tables and save JSON data which you can use anyw
 You can -
 1. Attach meta information to a table like name, description, number of rows, index of header row etc.
 2. Edit content of each cell.
-3. Edit formatting of each cell like bold, right align, Italic etc.
+3. Attach formatting to each cell like bold, right align, Italic etc.
 4. Initialize with JSON table data.
 5. Subscribe to content change callback.
 6. Keyboard shortcuts up, down keys, tab, reverse tab, undo, redo.
 
-USE CASE- Just to attach formatting information to each cell and content of each cell.
+**USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
-
 
 ## Build status
 [![Build Status](https://travis-ci.org/rajatsingla/JSON-table.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table)
@@ -25,9 +30,6 @@ Then you can use this JSON data to show table anywhere be it web, andriod, ios, 
 Using Standard code style.
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
-
-## Screenshot
-![Screen Cast](https://media.giphy.com/media/fxq5c5vwZErxoESC7Q/giphy.gif)
 
 ## Tech/framework used
 Built With vanillaJS (ES5)
@@ -43,7 +45,8 @@ Also, you can download it using npm.
 Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table), extract it, and copy  dist/json-table.min.js into your project’s folder.
 
 #### Link the javascript file
-`<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`            
+`<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`        
+    
 `<link rel="stylesheet" href="bower_components/json-table/dist/json-table.min.css" />`               
 Note: If you didn’t install using Bower, you need to adjust the path of the JS and CSS file to match your file structure.
 
