@@ -10,6 +10,7 @@ var shell = require('shelljs');
 var jsFiles = 'src/js/*.js';
 var cssFiles = 'src/css/*.css';
 var Dest = 'dist';
+var name = 'json-table-editor';
 
 
 var cleanDest = function () {
@@ -29,18 +30,18 @@ var concateJS = function () {
           "utils.js",
           "end.js"
         ]))
-        .pipe(concat('json-table.js'))
+        .pipe(concat(name + '.js'))
         .pipe(gulp.dest(Dest))
-        .pipe(rename("json-table.min.js"))
+        .pipe(rename(name + ".min.js"))
         .pipe(uglify())
         .pipe(gulp.dest(Dest));
 }
 
 var concateCSS = function () {
   return gulp.src(cssFiles)
-      .pipe(concat('json-table.css'))
+      .pipe(concat(name + '.css'))
       .pipe(gulp.dest(Dest))
-      .pipe(rename("json-table.min.css"))
+      .pipe(rename(name + ".min.css"))
       .pipe(cleanCSS())
       .pipe(gulp.dest(Dest));
 }

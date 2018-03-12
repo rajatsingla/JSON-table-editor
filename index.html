@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <link rel="stylesheet" href="./json_table.css" />
+  <link rel="stylesheet" href="./dist/json-table-editor.min.css" />
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 </head>
 <body>
@@ -13,11 +13,11 @@
   <div> Data</div>
   <pre id="prettyprint" class="prettyprint lang-json"></pre>
 
-  <script type="text/javascript" src="./json_table.js"></script>
+  <script type="text/javascript" src="./dist/json-table-editor.min.js"></script>
 
 
   <script type="text/javascript" charset="utf-8">
-      var table = new JSONTable("#editable");
+      var table = new JSONTableEditor("#editable");
 
       table.view.container.addEventListener('data_changed',function(){document.getElementById('prettyprint').innerHTML=JSON.stringify(table.model.table_data,undefined,2)})
   </script>

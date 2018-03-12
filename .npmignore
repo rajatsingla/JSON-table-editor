@@ -4,6 +4,7 @@ node_modules/
 bower_components/
 index.html
 .gitignore
+.nojekyll
 .travis.yml
 bower.json
 spec/

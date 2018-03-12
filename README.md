@@ -1,8 +1,8 @@
 ## JSON Editable Table
-JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
+JSON table editor is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
 
 ## Build status
-[![Build Status](https://travis-ci.org/rajatsingla/JSON-table.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table)
+[![Build Status](https://travis-ci.org/rajatsingla/JSON-table-editor.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table-editor)
 
 ## Code style
 Using Standard code style.
@@ -10,7 +10,7 @@ Using Standard code style.
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 ## Demo
-[https://rajatsingla.github.io/JSON-table/](https://rajatsingla.github.io/JSON-table/)
+[https://rajatsingla.github.io/JSON-table-editor/](https://rajatsingla.github.io/JSON-table-editor/)
 
 ## Screenshot
 ![Screen Cast](https://media.giphy.com/media/fxq5c5vwZErxoESC7Q/giphy.gif)
@@ -36,26 +36,26 @@ Built With vanillaJS (ES5)
 
 ## Quick Start
 #### Get the file
-The easiest way to use JSONTable in your project is via the Bower package manager.
-`bower install json-table`
+The easiest way to use JSONTableEditor in your project is via the Bower package manager.
+`bower install json-table-editor`
 
 Also, you can download it using npm.
-`npm install json-table`
+`npm install json-table-editor`
 
-Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table), extract it, and copy  dist/json-table.min.js into your project’s folder.
+Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table-editor), extract it, and copy  dist/json-table-editor.min.js and dist/json-table-editor.min.css into your project’s folder.
 
 #### Link the javascript file
-`<script type="text/javascript" src="bower_components/json-table/dist/json-table.min.js"></script>`        
+`<script type="text/javascript" src="bower_components/json-table-editor/dist/json-table-editor.min.js"></script>`        
 
-`<link rel="stylesheet" href="bower_components/json-table/dist/json-table.min.css" />`               
+`<link rel="stylesheet" href="bower_components/json-table-editor/dist/json-table-editor.min.css" />`               
 Note: If you didn’t install using Bower, you need to adjust the path of the JS and CSS file to match your file structure.
 
 #### Initialize the table
-`table = new JSONTable(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`
+`table = new JSONTableEditor(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`
 
 Example:-
 `<div id="foobar"></div>`                
-`table = new JSONTable("#foobar")`
+`table = new JSONTableEditor("#foobar")`
 
 ## Get Data
 `table.model.table_data`
@@ -80,7 +80,7 @@ Default value is 10
 
 * **formatOptions**
 For defining format buttons on editor, like bold, underline etc.           
-More info on [formatOptions](https://github.com/rajatsingla/JSON-table#more-info-on-formatOptions)            
+More info on [formatOptions](https://github.com/rajatsingla/JSON-table-editor#more-info-on-formatOptions)            
 Default value is
 ```js
 [
@@ -104,7 +104,7 @@ Default value is
 
 * **metaFields**
 Meta Fields for each table like name, description etc.                
-More info on [metaFields](https://github.com/rajatsingla/JSON-table#more-info-on-metafields)                   
+More info on [metaFields](https://github.com/rajatsingla/JSON-table-editor#more-info-on-metafields)                   
 Default value is
 ```js
 [
@@ -120,17 +120,17 @@ Default value is
 ```
 
 ## Examples of Options Object
-`table = new JSONTable(<selector for container>, <Options Object (optional), <JSON data (optional)>);
+`table = new JSONTableEditor(<selector for container>, <Options Object (optional), <JSON data (optional)>);
 `
 ```
-table = new JSONTable("#foobar", {
+table = new JSONTableEditor("#foobar", {
     gridColumns: 10,
     gridRows: 10
   })
 ```
 
 ```js
-table = new JSONTable("#foobar", {
+table = new JSONTableEditor("#foobar", {
     gridColumns: 10,
     gridRows: 10,
     formatOptions: [
@@ -181,7 +181,7 @@ If `center` is active it will add `center` to active cell's format data under ke
 You can add multiple radio types and any number of options based on your format need, use your imagination.                  
 If `center` is active it will also add a class named `jt-cell-center` to active cell.                   
 CSS for some of the classes is written, if you use some other options you may have to write css for that class.                          
-[How to pass formatOptions](https://github.com/rajatsingla/JSON-table#examples-of-options-object)
+[How to pass formatOptions](https://github.com/rajatsingla/JSON-table-editor#examples-of-options-object)
 
 
 ## More info on metaFields
@@ -218,7 +218,47 @@ You can add multiple integer type fields , use your imagination.
 This will add a select box with options and title `Is this Table Ok` and its value will be added in table meta.            
 You can add multiple select boxes , use your imagination.          
 
-[How to pass formatOptions](https://github.com/rajatsingla/JSON-table#examples-of-options-object)
+[How to pass formatOptions](https://github.com/rajatsingla/JSON-table-editor#examples-of-options-object)
+
+## Format of table JSON data
+```js
+{
+  "meta": {
+    "rows": 2,
+    "columns": 2,
+    "name": "Politicians Age"
+  },
+  "data": [
+    [
+      {
+        "content": "Narendra Modi",
+        "format": {
+          "align": "right",
+          "italic": true
+        }
+      },
+      {
+        "content": "Manmohan Singh",
+        "format": {
+          "align": "right",
+          "italic": true
+        }
+      }
+    ],
+    [
+      {
+        "content": "55",
+        "format": {}
+      },
+      {
+        "content": "65",
+        "format": {}
+      }
+    ]
+  ]
+}
+```
+
 
 ## Test
 `npm test`

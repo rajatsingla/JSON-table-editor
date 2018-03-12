@@ -602,5 +602,5 @@ JSONTable.prototype = {
     }
   }
 
- window.JSONTable = JSONTable
+ window.JSONTableEditor = JSONTable
 })()

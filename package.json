@@ -1,19 +1,19 @@
 {
-  "name": "json-table",
+  "name": "json-table-editor",
   "version": "1.0.0",
-  "description": "JSON table is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.",
+  "description": "JSON table editor is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.",
   "main": [
-    "dist/json-table.css",
-    "dist/json-table.js",
-    "dist/json-table.min.css",
-    "dist/json-table.min.js"
+    "dist/json-table-editor.css",
+    "dist/json-table-editor.js",
+    "dist/json-table-editor.min.css",
+    "dist/json-table-editor.min.js"
   ],
   "scripts": {
     "test": "jasmine"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rajatsingla/JSON-table.git"
+    "url": "git+https://github.com/rajatsingla/JSON-table-editor.git"
   },
   "keywords": [
     "html",
@@ -21,14 +21,15 @@
     "editor",
     "JSON",
     "json-table",
+    "json-table-editor",
     "editable"
   ],
   "author": "rajat singla",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rajatsingla/JSON-table/issues"
+    "url": "https://github.com/rajatsingla/JSON-table-editor/issues"
   },
-  "homepage": "https://github.com/rajatsingla/JSON-table#readme",
+  "homepage": "https://github.com/rajatsingla/JSON-table-editor#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
