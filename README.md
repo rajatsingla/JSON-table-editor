@@ -259,6 +259,13 @@ You can add multiple select boxes , use your imagination.
 }
 ```
 
+## Keyboard shortcuts
+*   <kbd>tab</kbd> - Move to right cell by pressing tab.
+*   <kbd>shift + tab</kbd> - Move to left cell by shift + tab.
+*   <kbd>top arrow</kbd> - Move to upper cell by pressing upper arrow.
+*   <kbd>down arrow</kbd> - Move to upper cell by pressing down arrow.
+*   <kbd>ctrl + z</kbd> - Press ctrl + z to undo the changes.
+*   <kbd>shift + ctrl + z</kbd> - Press shift + ctrl + z to redo the changes.
 
 ## Test
 `npm test`
@@ -268,6 +275,12 @@ You can add multiple select boxes , use your imagination.
 * Make changes in src/.js or src/.css
 * Run `gulp build`
 * Generate a PR
+
+## WIP
+todos
+* Implement undo/redo functionality
+* Css of meta fields
+* Write tests
 
 ## License
 LICENSE (MIT)

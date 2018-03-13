@@ -1,4 +1,4 @@
-function JSONTable (selector, tableData, options) {
+function JSONTable (selector, options, tableData) {
   return this.init(selector, tableData, options)
 }
 
@@ -10,12 +10,13 @@ JSONTable.prototype = {
     this.gridRows = options.gridRows || DEFAULTOPTIONS.gridRows
     this.gridColumns = options.gridColumns || DEFAULTOPTIONS.gridColumns
     this.formatOptions = options.formatOptions || DEFAULTOPTIONS.formatOptions
+    this.metaFields = options.metaFields || DEFAULTOPTIONS.metaFields
     this.container = JSONTable.qs(selector)
     if (!this.container) {
       throw DEFAULTOPTIONS.selectorWrongMsg
     }
     this.model = new JSONTableModel(tableData)
-    this.view = new JSONTableView(this.container, this.formatOptions)
+    this.view = new JSONTableView(this.container, this.formatOptions, this.metaFields)
     this.controller = new JSONTableController(this.view, this.model)
     this.setupTable()
   },
@@ -37,8 +38,9 @@ JSONTable.prototype = {
   },
 
   initTable: function () {
-    this.view.insert()
+    this.view.insert(this.model)
     this.view.update(this.model)
     this.controller.bindEvents()
+    this.keyboardHandler = new JSONTableKeyboardShortcuts(this.view, this.model)
   }
 }

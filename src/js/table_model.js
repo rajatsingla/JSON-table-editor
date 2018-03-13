@@ -39,6 +39,10 @@ JSONTableModel.prototype = {
     this.data[row][column].content = event.target.innerHTML
   },
 
+  updateMetaContent: function (event) {
+    this.meta[event.target.dataset.metakey] = event.target.value
+  },
+
   addARow: function () {
     this.meta.rows += 1
     this.updateDataAddRemoveExtraRowColumn()

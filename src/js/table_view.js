@@ -1,20 +1,22 @@
-function JSONTableView (container, formatOptions) {
-  return this.init(container, formatOptions)
+function JSONTableView (container, formatOptions, metaFields) {
+  return this.init(container, formatOptions, metaFields)
 }
 
 JSONTableView.prototype = {
-  init: function (container, formatOptions) {
+  init: function (container, formatOptions, metaFields) {
     this.table = document.createElement('table')
     this.table.setAttribute('class', DEFAULTOPTIONS.tableMainClass)
     this.cellTag = 'td'
     this.container = container
     this.formatOptions = formatOptions
+    this.metaFields = metaFields
+    this.metaFieldsId = DEFAULTOPTIONS.metaFieldsId
     this.formatOptionsId = DEFAULTOPTIONS.formatOptionsId
     this.colBtnId = DEFAULTOPTIONS.colBtnId
     this.rowBtnId = DEFAULTOPTIONS.rowBtnId
   },
 
-  insert: function () {
+  insert: function (model) {
     var container = this.container
     if (container.firstChild) {
       container.replaceChild(this.table, container.childNodes[0])
@@ -23,6 +25,8 @@ JSONTableView.prototype = {
     }
     container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer())
     this.updateFormatOptions()
+    container.insertAdjacentHTML('afterbegin', this.metaFieldsContainer())
+    this.updateMetaFields(model)
     container.insertAdjacentHTML('beforeend', this.utilButtons())
   },
 
@@ -82,6 +86,28 @@ JSONTableView.prototype = {
     return html
   },
 
+  updateMetaFields: function (model) {
+    var html = '';
+    for (var i = 0; i < this.metaFields.length; i++) {
+      var field = this.metaFields[i]
+      if (field.type === "string"){
+        html += field.name + ":" + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === "integer") {
+        html += field.name + ":" + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === "select") {
+        html += field.name + ":" +'<select' + ' data-metakey="' + field.name + '">'
+        for (var j = 0; j < field.options.length; j++) {
+          html += '<option value="' + field.options[j] + '"'
+          html += (model.meta[field.name] === field.options[j] ? ' selected' : '')
+          html += '>' + field.options[j] + '</option>'
+        }
+        html += '</select><br>'
+      }
+    }
+    var metaFieldsContainer = JSONTable.qs('#' + this.metaFieldsId, this.container)
+    metaFieldsContainer.innerHTML = html
+  },
+
   focusCurrentCell: function (currentCell) {
     var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']"
     var cell = JSONTable.qs(selector, this.container)
@@ -89,6 +115,12 @@ JSONTableView.prototype = {
       cell.focus()
       setTimeout(function () { JSONTable.setEndOfContenteditable(cell) }, 0)
     }
+  },
+
+  metaFieldsContainer: function () {
+    var html = '<div class="jt-meta-fields" id="' + this.metaFieldsId + '">'
+    html += '</div>'
+    return html
   },
 
   formatOptionsContainer: function () {

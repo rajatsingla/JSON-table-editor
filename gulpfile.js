@@ -23,6 +23,7 @@ var concateJS = function () {
           "start.js",
           "constants.js",
           "grid.js",
+          "keyboard_shortcuts.js",
           "table_view.js",
           "table_model.js",
           "table_controller.js",

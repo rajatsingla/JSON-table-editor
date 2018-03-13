@@ -14,29 +14,41 @@ JSON table is a minimal, yet flexible HTML table editor, where you can attach fo
 var COLUMN_WIDTH = 16
 var BORDER_WIDTH = 1
 var DEFAULTOPTIONS = {
-  formatOptions: [{
-    type: 'button',
-    name: 'bold',
-    innerHTML: 'Bold'
-  },
-  {
-    type: 'button',
-    name: 'italic',
-    innerHTML: 'Italic'
-  },
-  {
-    type: 'radio',
-    name: 'align',
-    options: ['left', 'center', 'right']
-  }
+  formatOptions: [
+    {
+      type: 'button',
+      name: 'bold',
+      innerHTML: 'Bold'
+    },
+    {
+      type: 'button',
+      name: 'italic',
+      innerHTML: 'Italic'
+    },
+    {
+      type: 'radio',
+      name: 'align',
+      options: ['left', 'center', 'right']
+    }
   ],
   gridColumns: 10,
   gridRows: 10,
   selectorWrongMsg: 'Can\'t find html element with given selector.',
+  metaFieldsId: 'jt-meta-fields',
   formatOptionsId: 'jt-format-options',
   colBtnId: 'jt-col-btn',
   rowBtnId: 'jt-row-btn',
-  tableMainClass: 'js-main-table'
+  tableMainClass: 'js-main-table',
+  metaFields: [
+    {
+      type: 'string',
+      name: 'name'
+    },
+    {
+      type: 'string',
+      name: 'description'
+    }
+  ]
 }
 
 function Grid (el, callback, rows, columns) {
@@ -157,23 +169,72 @@ Grid.prototype = {
   }
 }
 
-function JSONTableView (container, formatOptions) {
-  return this.init(container, formatOptions)
+function JSONTableKeyboardShortcuts (view, model) {
+  return this.init(view, model)
+}
+
+JSONTableKeyboardShortcuts.prototype = {
+  init: function (view, model) {
+    this.view = view
+    this.model = model
+    this.bindUpKey()
+    this.bindDownKey()
+    this.bindUndoKey()
+    this.bindRedoKey()
+  },
+
+  bindUpKey: function () {
+    var self = this;
+    this.view.container.addEventListener('keydown', function(event){
+      if (event.keyCode === 38 && self.model.currentCell) {
+        self.moveArrowUpDown(-1)
+      }
+    })
+  },
+
+  bindDownKey: function () {
+    var self = this;
+    this.view.container.addEventListener('keydown', function(event){
+      if (event.keyCode === 40 && self.model.currentCell) {
+        self.moveArrowUpDown(1)
+      }
+    })
+  },
+
+  moveArrowUpDown: function (direction, keyCode) {
+    var currentCell = Object.assign({}, this.model.currentCell)
+    currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows)%this.model.meta.rows
+    this.view.focusCurrentCell(currentCell)
+  },
+
+  bindUndoKey: function () {
+
+  },
+
+  bindRedoKey: function () {
+
+  }
+}
+
+function JSONTableView (container, formatOptions, metaFields) {
+  return this.init(container, formatOptions, metaFields)
 }
 
 JSONTableView.prototype = {
-  init: function (container, formatOptions) {
+  init: function (container, formatOptions, metaFields) {
     this.table = document.createElement('table')
     this.table.setAttribute('class', DEFAULTOPTIONS.tableMainClass)
     this.cellTag = 'td'
     this.container = container
     this.formatOptions = formatOptions
+    this.metaFields = metaFields
+    this.metaFieldsId = DEFAULTOPTIONS.metaFieldsId
     this.formatOptionsId = DEFAULTOPTIONS.formatOptionsId
     this.colBtnId = DEFAULTOPTIONS.colBtnId
     this.rowBtnId = DEFAULTOPTIONS.rowBtnId
   },
 
-  insert: function () {
+  insert: function (model) {
     var container = this.container
     if (container.firstChild) {
       container.replaceChild(this.table, container.childNodes[0])
@@ -182,6 +243,8 @@ JSONTableView.prototype = {
     }
     container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer())
     this.updateFormatOptions()
+    container.insertAdjacentHTML('afterbegin', this.metaFieldsContainer())
+    this.updateMetaFields(model)
     container.insertAdjacentHTML('beforeend', this.utilButtons())
   },
 
@@ -241,6 +304,28 @@ JSONTableView.prototype = {
     return html
   },
 
+  updateMetaFields: function (model) {
+    var html = '';
+    for (var i = 0; i < this.metaFields.length; i++) {
+      var field = this.metaFields[i]
+      if (field.type === "string"){
+        html += field.name + ":" + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === "integer") {
+        html += field.name + ":" + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === "select") {
+        html += field.name + ":" +'<select' + ' data-metakey="' + field.name + '">'
+        for (var j = 0; j < field.options.length; j++) {
+          html += '<option value="' + field.options[j] + '"'
+          html += (model.meta[field.name] === field.options[j] ? ' selected' : '')
+          html += '>' + field.options[j] + '</option>'
+        }
+        html += '</select><br>'
+      }
+    }
+    var metaFieldsContainer = JSONTable.qs('#' + this.metaFieldsId, this.container)
+    metaFieldsContainer.innerHTML = html
+  },
+
   focusCurrentCell: function (currentCell) {
     var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']"
     var cell = JSONTable.qs(selector, this.container)
@@ -248,6 +333,12 @@ JSONTableView.prototype = {
       cell.focus()
       setTimeout(function () { JSONTable.setEndOfContenteditable(cell) }, 0)
     }
+  },
+
+  metaFieldsContainer: function () {
+    var html = '<div class="jt-meta-fields" id="' + this.metaFieldsId + '">'
+    html += '</div>'
+    return html
   },
 
   formatOptionsContainer: function () {
@@ -352,6 +443,10 @@ JSONTableModel.prototype = {
     this.data[row][column].content = event.target.innerHTML
   },
 
+  updateMetaContent: function (event) {
+    this.meta[event.target.dataset.metakey] = event.target.value
+  },
+
   addARow: function () {
     this.meta.rows += 1
     this.updateDataAddRemoveExtraRowColumn()
@@ -444,6 +539,7 @@ JSONTableController.prototype = {
       self.handleCellBlur(e)
     })
     this.bindEventOnFormatingOptions()
+    this.bindEventOnMetaFields()
   },
 
   bindEventOnCell: function (type, handler) {
@@ -465,6 +561,18 @@ JSONTableController.prototype = {
     }
   },
 
+  bindEventOnMetaFields: function () {
+    var self = this
+    JSONTable.delegate(
+      JSONTable.qs('#' + this.view.metaFieldsId, this.view.container),
+      'input, select',
+      'change',
+      function (e) {
+        self.handleMetaChange(e)
+      }
+    )
+  },
+
   handleCellFocus: function (event) {
     var self = this
     this.model.setCurrentCell(event.target.dataset)
@@ -484,6 +592,11 @@ JSONTableController.prototype = {
         self.view.updateFormatOptions()
       }
     }, 15)
+  },
+
+  handleMetaChange: function (event) {
+    this.model.updateMetaContent(event)
+    this.view.container.dispatchEvent(this.model.data_changed_event)
   },
 
   handleBtnClick: function (event) {
@@ -510,7 +623,7 @@ JSONTableController.prototype = {
   }
 }
 
-function JSONTable (selector, tableData, options) {
+function JSONTable (selector, options, tableData) {
   return this.init(selector, tableData, options)
 }
 
@@ -522,12 +635,13 @@ JSONTable.prototype = {
     this.gridRows = options.gridRows || DEFAULTOPTIONS.gridRows
     this.gridColumns = options.gridColumns || DEFAULTOPTIONS.gridColumns
     this.formatOptions = options.formatOptions || DEFAULTOPTIONS.formatOptions
+    this.metaFields = options.metaFields || DEFAULTOPTIONS.metaFields
     this.container = JSONTable.qs(selector)
     if (!this.container) {
       throw DEFAULTOPTIONS.selectorWrongMsg
     }
     this.model = new JSONTableModel(tableData)
-    this.view = new JSONTableView(this.container, this.formatOptions)
+    this.view = new JSONTableView(this.container, this.formatOptions, this.metaFields)
     this.controller = new JSONTableController(this.view, this.model)
     this.setupTable()
   },
@@ -549,9 +663,10 @@ JSONTable.prototype = {
   },
 
   initTable: function () {
-    this.view.insert()
+    this.view.insert(this.model)
     this.view.update(this.model)
     this.controller.bindEvents()
+    this.keyboardHandler = new JSONTableKeyboardShortcuts(this.view, this.model)
   }
 }
 
@@ -600,6 +715,41 @@ JSONTable.prototype = {
       range.collapse(false)
       range.select()
     }
+  }
+
+  JSONTable.orEmpty = function (entity) {
+    return entity || ""
+  }
+
+  // polyfill for Object.assign
+  if (typeof Object.assign != 'function') {
+    // Must be writable: true, enumerable: false, configurable: true
+    Object.defineProperty(Object, "assign", {
+      value: function assign(target, varArgs) { // .length of function is 2
+        'use strict';
+        if (target == null) { // TypeError if undefined or null
+          throw new TypeError('Cannot convert undefined or null to object');
+        }
+
+        var to = Object(target);
+
+        for (var index = 1; index < arguments.length; index++) {
+          var nextSource = arguments[index];
+
+          if (nextSource != null) { // Skip over if undefined or null
+            for (var nextKey in nextSource) {
+              // Avoid bugs when hasOwnProperty is shadowed
+              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+        }
+        return to;
+      },
+      writable: true,
+      configurable: true
+    });
   }
 
  window.JSONTableEditor = JSONTable

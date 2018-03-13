@@ -8,3 +8,4 @@ index.html
 .travis.yml
 bower.json
 spec/
+src/
