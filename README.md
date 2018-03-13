@@ -2,7 +2,7 @@
 JSON table editor is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
 
 ## Build status
-[![Build Status](https://travis-ci.org/rajatsingla/JSON-table.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table)
+[![Build Status](https://travis-ci.org/rajatsingla/JSON-table-editor.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table-editor)
 
 ## Code style
 Using Standard code style.
