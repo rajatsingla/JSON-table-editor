@@ -42,6 +42,7 @@ table.js-main-table td {
     box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.11);
     transition: .5s all;
     text-transform: capitalize;
+    background-color: white;
 }
 
 .jt-format-options button:hover, .jt-col-btn button:hover, .jt-row-btn button:hover{

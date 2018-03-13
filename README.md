@@ -21,12 +21,12 @@ It is **not** meant to be a viewer for large spreadsheet data.
 It is intended to maintain HTML tables and save JSON data which you can use anywhere.
 
 You can -
-1. Attach meta information to a table like name, description, number of rows, index of header row etc.
+1. Attach meta information to a table like title, description, number of rows, index of header row etc.
 2. Edit content of each cell.
 3. Attach formatting to each cell like bold, right align, Italic etc.
 4. Initialize with JSON table data.
 5. Subscribe to content change callback.
-6. Keyboard shortcuts up, down keys, tab, reverse tab, undo, redo.
+6. Keyboard shortcuts up, down keys, tab, reverse tab.
 
 **USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
@@ -58,12 +58,12 @@ Example:-
 `table = new JSONTableEditor("#foobar")`
 
 ## Get Data
-`table.model.table_data`
+`table.model.tableData`
 
-#### Attach a callback to data_change
+#### Attach a callback to dataChange
 ```js
-table.view.container.addEventListener('data_changed',function(){
-  console.log('table.model.table_data')
+table.view.container.addEventListener('dataChanged',function(){
+  console.log('table.model.tableData')
 })
 ```
 
@@ -110,7 +110,7 @@ Default value is
 [
   {
     type: 'string',
-    name: 'name'
+    name: 'title'
   },
   {
     type: 'string',
@@ -143,7 +143,7 @@ table = new JSONTableEditor("#foobar", {
     metaFields: [
       {
         type: 'string',
-        name: 'name'
+        name: 'title'
       }
     ]
   })
@@ -191,7 +191,7 @@ There can be three types of metaFields.
 ```js
 {
   type: 'string',
-  name: 'name'
+  name: 'title'
 }
 ```
 This will add a input box with title `name` and its value will be added in table meta.                 
@@ -226,7 +226,7 @@ You can add multiple select boxes , use your imagination.
   "meta": {
     "rows": 2,
     "columns": 2,
-    "name": "Politicians Age"
+    "title": "Politicians Age"
   },
   "data": [
     [
@@ -264,8 +264,6 @@ You can add multiple select boxes , use your imagination.
 *   <kbd>shift + tab</kbd> - Move to left cell by shift + tab.
 *   <kbd>top arrow</kbd> - Move to upper cell by pressing upper arrow.
 *   <kbd>down arrow</kbd> - Move to upper cell by pressing down arrow.
-*   <kbd>ctrl + z</kbd> - Press ctrl + z to undo the changes.
-*   <kbd>shift + ctrl + z</kbd> - Press shift + ctrl + z to redo the changes.
 
 ## Test
 `npm test`
@@ -276,10 +274,8 @@ You can add multiple select boxes , use your imagination.
 * Run `gulp build`
 * Generate a PR
 
-## WIP
-todos
+## TODOs
 * Implement undo/redo functionality
-* Css of meta fields
 * Write tests
 
 ## License

@@ -29,7 +29,7 @@ var DEFAULTOPTIONS = {
   metaFields: [
     {
       type: 'string',
-      name: 'name'
+      name: 'title'
     },
     {
       type: 'string',

@@ -8,8 +8,6 @@ JSONTableKeyboardShortcuts.prototype = {
     this.model = model
     this.bindUpKey()
     this.bindDownKey()
-    this.bindUndoKey()
-    this.bindRedoKey()
   },
 
   bindUpKey: function () {
@@ -34,13 +32,5 @@ JSONTableKeyboardShortcuts.prototype = {
     var currentCell = Object.assign({}, this.model.currentCell)
     currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows)%this.model.meta.rows
     this.view.focusCurrentCell(currentCell)
-  },
-
-  bindUndoKey: function () {
-
-  },
-
-  bindRedoKey: function () {
-
   }
 }

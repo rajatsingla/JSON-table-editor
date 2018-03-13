@@ -42,7 +42,7 @@ var DEFAULTOPTIONS = {
   metaFields: [
     {
       type: 'string',
-      name: 'name'
+      name: 'title'
     },
     {
       type: 'string',
@@ -179,8 +179,6 @@ JSONTableKeyboardShortcuts.prototype = {
     this.model = model
     this.bindUpKey()
     this.bindDownKey()
-    this.bindUndoKey()
-    this.bindRedoKey()
   },
 
   bindUpKey: function () {
@@ -205,14 +203,6 @@ JSONTableKeyboardShortcuts.prototype = {
     var currentCell = Object.assign({}, this.model.currentCell)
     currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows)%this.model.meta.rows
     this.view.focusCurrentCell(currentCell)
-  },
-
-  bindUndoKey: function () {
-
-  },
-
-  bindRedoKey: function () {
-
   }
 }
 
@@ -408,13 +398,13 @@ function JSONTableModel (tableData) {
 
 JSONTableModel.prototype = {
   init: function (tableData) {
-    this.table_data = tableData || { meta: {}, data: [] }
-    this.meta = this.table_data.meta
-    this.data = this.table_data.data
+    this.tableData = tableData || { meta: {}, data: [] }
+    this.meta = this.tableData.meta
+    this.data = this.tableData.data
     this.meta.rows = null
     this.meta.columns = null
     this.currentCell = null
-    this.data_changed_event = new window.Event('data_changed')
+    this.data_changed_event = new window.Event('dataChanged')
   },
 
   isValidData: function () {
