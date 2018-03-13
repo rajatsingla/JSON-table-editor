@@ -87,15 +87,15 @@ JSONTableView.prototype = {
   },
 
   updateMetaFields: function (model) {
-    var html = '';
+    var html = ''
     for (var i = 0; i < this.metaFields.length; i++) {
       var field = this.metaFields[i]
-      if (field.type === "string"){
-        html += field.name + ":" + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
-      } else if (field.type === "integer") {
-        html += field.name + ":" + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
-      } else if (field.type === "select") {
-        html += field.name + ":" +'<select' + ' data-metakey="' + field.name + '">'
+      if (field.type === 'string') {
+        html += field.name + ':' + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === 'integer') {
+        html += field.name + ':' + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === 'select') {
+        html += field.name + ':' + '<select' + ' data-metakey="' + field.name + '">'
         for (var j = 0; j < field.options.length; j++) {
           html += '<option value="' + field.options[j] + '"'
           html += (model.meta[field.name] === field.options[j] ? ' selected' : '')

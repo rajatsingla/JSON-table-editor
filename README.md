@@ -103,7 +103,7 @@ Default value is
 ```
 
 * **metaFields**
-Meta Fields for each table like name, description etc.                
+Meta Fields for each table like title, description etc.                
 More info on [metaFields](https://github.com/rajatsingla/JSON-table-editor#more-info-on-metafields)                   
 Default value is
 ```js
@@ -185,7 +185,7 @@ CSS for some of the classes is written, if you use some other options you may ha
 
 
 ## More info on metaFields
-`metaFields` is an object which determines the meta fields, like name, description etc.                   
+`metaFields` is an object which determines the meta fields, like title, description etc.                   
 There can be three types of metaFields.
 1. `string`
 ```js
@@ -194,7 +194,7 @@ There can be three types of metaFields.
   name: 'title'
 }
 ```
-This will add a input box with title `name` and its value will be added in table meta.                 
+This will add a input box with title `title` and its value will be added in table meta.                 
 You can add multiple string type fields , use your imagination.
 
 2. `integer`

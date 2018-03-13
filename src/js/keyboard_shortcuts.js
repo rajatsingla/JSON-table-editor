@@ -11,8 +11,8 @@ JSONTableKeyboardShortcuts.prototype = {
   },
 
   bindUpKey: function () {
-    var self = this;
-    this.view.container.addEventListener('keydown', function(event){
+    var self = this
+    this.view.container.addEventListener('keydown', function (event) {
       if (event.keyCode === 38 && self.model.currentCell) {
         self.moveArrowUpDown(-1)
       }
@@ -20,8 +20,8 @@ JSONTableKeyboardShortcuts.prototype = {
   },
 
   bindDownKey: function () {
-    var self = this;
-    this.view.container.addEventListener('keydown', function(event){
+    var self = this
+    this.view.container.addEventListener('keydown', function (event) {
       if (event.keyCode === 40 && self.model.currentCell) {
         self.moveArrowUpDown(1)
       }
@@ -30,7 +30,7 @@ JSONTableKeyboardShortcuts.prototype = {
 
   moveArrowUpDown: function (direction, keyCode) {
     var currentCell = Object.assign({}, this.model.currentCell)
-    currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows)%this.model.meta.rows
+    currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows) % this.model.meta.rows
     this.view.focusCurrentCell(currentCell)
   }
 }

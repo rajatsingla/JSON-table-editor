@@ -19,7 +19,7 @@
   <script type="text/javascript" charset="utf-8">
       var table = new JSONTableEditor("#editable");
 
-      table.view.container.addEventListener('data_changed',function(){document.getElementById('prettyprint').innerHTML=JSON.stringify(table.model.table_data,undefined,2)})
+      table.view.container.addEventListener('dataChanged',function(){document.getElementById('prettyprint').innerHTML=JSON.stringify(table.model.tableData,undefined,2)})
   </script>
 </body>
 </html>

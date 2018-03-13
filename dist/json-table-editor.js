@@ -182,8 +182,8 @@ JSONTableKeyboardShortcuts.prototype = {
   },
 
   bindUpKey: function () {
-    var self = this;
-    this.view.container.addEventListener('keydown', function(event){
+    var self = this
+    this.view.container.addEventListener('keydown', function (event) {
       if (event.keyCode === 38 && self.model.currentCell) {
         self.moveArrowUpDown(-1)
       }
@@ -191,8 +191,8 @@ JSONTableKeyboardShortcuts.prototype = {
   },
 
   bindDownKey: function () {
-    var self = this;
-    this.view.container.addEventListener('keydown', function(event){
+    var self = this
+    this.view.container.addEventListener('keydown', function (event) {
       if (event.keyCode === 40 && self.model.currentCell) {
         self.moveArrowUpDown(1)
       }
@@ -201,7 +201,7 @@ JSONTableKeyboardShortcuts.prototype = {
 
   moveArrowUpDown: function (direction, keyCode) {
     var currentCell = Object.assign({}, this.model.currentCell)
-    currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows)%this.model.meta.rows
+    currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows) % this.model.meta.rows
     this.view.focusCurrentCell(currentCell)
   }
 }
@@ -295,15 +295,15 @@ JSONTableView.prototype = {
   },
 
   updateMetaFields: function (model) {
-    var html = '';
+    var html = ''
     for (var i = 0; i < this.metaFields.length; i++) {
       var field = this.metaFields[i]
-      if (field.type === "string"){
-        html += field.name + ":" + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
-      } else if (field.type === "integer") {
-        html += field.name + ":" + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
-      } else if (field.type === "select") {
-        html += field.name + ":" +'<select' + ' data-metakey="' + field.name + '">'
+      if (field.type === 'string') {
+        html += field.name + ':' + '<input type="text" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === 'integer') {
+        html += field.name + ':' + '<input type="number" name="' + field.name + '" data-metakey="' + field.name + '" value="' + JSONTable.orEmpty(model.meta[field.name]) + '"><br>'
+      } else if (field.type === 'select') {
+        html += field.name + ':' + '<select' + ' data-metakey="' + field.name + '">'
         for (var j = 0; j < field.options.length; j++) {
           html += '<option value="' + field.options[j] + '"'
           html += (model.meta[field.name] === field.options[j] ? ' selected' : '')
@@ -661,86 +661,86 @@ JSONTable.prototype = {
 }
 
 
-  // helper functions
-  JSONTable.qs = function (selector, scope) {
-    return (scope || document).querySelector(selector)
+// helper functions
+JSONTable.qs = function (selector, scope) {
+  return (scope || document).querySelector(selector)
+}
+
+JSONTable.qsa = function (selector, scope) {
+  return (scope || document).querySelectorAll(selector)
+}
+
+JSONTable.on = function (target, type, callback, useCapture) {
+  target.addEventListener(type, callback, !!useCapture)
+}
+
+JSONTable.delegate = function (target, selector, type, handler) {
+  function dispatchEvent (event) {
+    var targetElement = event.target
+    var potentialElements = JSONTable.qsa(selector, target)
+    var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0
+
+    if (hasMatch) {
+      handler.call(targetElement, event)
+    }
   }
+  // https://developer.mozilla.org/en-US/docs/Web/Events/blur
+  var useCapture = type === 'blur' || type === 'focus'
+  JSONTable.on(target, type, dispatchEvent, useCapture)
+}
 
-  JSONTable.qsa = function (selector, scope) {
-    return (scope || document).querySelectorAll(selector)
+// https://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
+JSONTable.setEndOfContenteditable = function (contentEditableElement) {
+  var range, selection
+  if (document.createRange) {
+    range = document.createRange()
+    range.selectNodeContents(contentEditableElement)
+    range.collapse(false)
+    selection = window.getSelection()
+    selection.removeAllRanges()
+    selection.addRange(range)
+  } else if (document.selection) {
+    range = document.body.createTextRange()
+    range.moveToElementText(contentEditableElement)
+    range.collapse(false)
+    range.select()
   }
+}
 
-  JSONTable.on = function (target, type, callback, useCapture) {
-    target.addEventListener(type, callback, !!useCapture)
-  }
+JSONTable.orEmpty = function (entity) {
+  return entity || ''
+}
 
-  JSONTable.delegate = function (target, selector, type, handler) {
-    function dispatchEvent (event) {
-      var targetElement = event.target
-      var potentialElements = JSONTable.qsa(selector, target)
-      var hasMatch = Array.prototype.indexOf.call(potentialElements, targetElement) >= 0
-
-      if (hasMatch) {
-        handler.call(targetElement, event)
+// polyfill for Object.assign
+if (typeof Object.assign !== 'function') {
+  // Must be writable: true, enumerable: false, configurable: true
+  Object.defineProperty(Object, 'assign', {
+    value: function assign (target, varArgs) { // .length of function is 2
+      'use strict'
+      if (target == null) { // TypeError if undefined or null
+        throw new TypeError('Cannot convert undefined or null to object')
       }
-    }
-    // https://developer.mozilla.org/en-US/docs/Web/Events/blur
-    var useCapture = type === 'blur' || type === 'focus'
-    JSONTable.on(target, type, dispatchEvent, useCapture)
-  }
 
-  // https://stackoverflow.com/questions/1125292/how-to-move-cursor-to-end-of-contenteditable-entity/3866442#3866442
-  JSONTable.setEndOfContenteditable = function (contentEditableElement) {
-    var range, selection
-    if (document.createRange) {
-      range = document.createRange()
-      range.selectNodeContents(contentEditableElement)
-      range.collapse(false)
-      selection = window.getSelection()
-      selection.removeAllRanges()
-      selection.addRange(range)
-    } else if (document.selection) {
-      range = document.body.createTextRange()
-      range.moveToElementText(contentEditableElement)
-      range.collapse(false)
-      range.select()
-    }
-  }
+      var to = Object(target)
 
-  JSONTable.orEmpty = function (entity) {
-    return entity || ""
-  }
+      for (var index = 1; index < arguments.length; index++) {
+        var nextSource = arguments[index]
 
-  // polyfill for Object.assign
-  if (typeof Object.assign != 'function') {
-    // Must be writable: true, enumerable: false, configurable: true
-    Object.defineProperty(Object, "assign", {
-      value: function assign(target, varArgs) { // .length of function is 2
-        'use strict';
-        if (target == null) { // TypeError if undefined or null
-          throw new TypeError('Cannot convert undefined or null to object');
-        }
-
-        var to = Object(target);
-
-        for (var index = 1; index < arguments.length; index++) {
-          var nextSource = arguments[index];
-
-          if (nextSource != null) { // Skip over if undefined or null
-            for (var nextKey in nextSource) {
-              // Avoid bugs when hasOwnProperty is shadowed
-              if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                to[nextKey] = nextSource[nextKey];
-              }
+        if (nextSource != null) { // Skip over if undefined or null
+          for (var nextKey in nextSource) {
+            // Avoid bugs when hasOwnProperty is shadowed
+            if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+              to[nextKey] = nextSource[nextKey]
             }
           }
         }
-        return to;
-      },
-      writable: true,
-      configurable: true
-    });
-  }
+      }
+      return to
+    },
+    writable: true,
+    configurable: true
+  })
+}
 
  window.JSONTableEditor = JSONTable
 })()
