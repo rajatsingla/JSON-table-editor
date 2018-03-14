@@ -21,12 +21,11 @@ It is **not** meant to be a viewer for large spreadsheet data.
 It is intended to maintain HTML tables and save JSON data which you can use anywhere.
 
 You can -
-1. Attach meta information to a table like title, description, number of rows, index of header row etc.
-2. Edit content of each cell.
-3. Attach formatting to each cell like bold, right align, Italic etc.
-4. Initialize with JSON table data.
-5. Subscribe to content change callback.
-6. Keyboard shortcuts up, down keys, tab, reverse tab.
+1. Edit content of each cell.
+2. Attach formatting to each cell like bold, right align, Italic etc.
+3. Initialize with JSON table data.
+4. Subscribe to content change callback.
+5. Keyboard shortcuts up, down keys, tab, reverse tab.
 
 **USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
@@ -53,9 +52,30 @@ Note: If you didn’t install using Bower, you need to adjust the path of the JS
 #### Initialize the table
 `table = new JSONTableEditor(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`
 
-Example:-
+## Examples
 `<div id="foobar"></div>`                
 `table = new JSONTableEditor("#foobar")`
+
+```js
+table = new JSONTableEditor("#foobar", {
+    gridColumns: 10,
+    gridRows: 10
+  })
+```
+
+```js
+table = new JSONTableEditor("#foobar", {
+    gridColumns: 10,
+    gridRows: 10,
+    formatOptions: [
+      {
+        type: 'button',
+        name: 'bold',
+        innerHTML: 'Bold'
+      },
+    ]
+  })
+```
 
 ## Get Data
 `table.model.tableData`
@@ -102,53 +122,6 @@ Default value is
 ]
 ```
 
-* **metaFields**
-Meta Fields for each table like title, description etc.                
-More info on [metaFields](https://github.com/rajatsingla/JSON-table-editor#more-info-on-metafields)                   
-Default value is
-```js
-[
-  {
-    type: 'string',
-    name: 'title'
-  },
-  {
-    type: 'string',
-    name: 'description'
-  }
-]
-```
-
-## Examples of Options Object
-`table = new JSONTableEditor(<selector for container>, <Options Object (optional), <JSON data (optional)>);
-`
-```
-table = new JSONTableEditor("#foobar", {
-    gridColumns: 10,
-    gridRows: 10
-  })
-```
-
-```js
-table = new JSONTableEditor("#foobar", {
-    gridColumns: 10,
-    gridRows: 10,
-    formatOptions: [
-      {
-        type: 'button',
-        name: 'bold',
-        innerHTML: 'Bold'
-      },
-    ],
-    metaFields: [
-      {
-        type: 'string',
-        name: 'title'
-      }
-    ]
-  })
-```
-
 ## More info on formatOptions
 `formatOptions` is an object which determines the buttons for formatting each cell.            
 There can be two types of formatOptions
@@ -181,52 +154,14 @@ If `center` is active it will add `center` to active cell's format data under ke
 You can add multiple radio types and any number of options based on your format need, use your imagination.                  
 If `center` is active it will also add a class named `jt-cell-center` to active cell.                   
 CSS for some of the classes is written, if you use some other options you may have to write css for that class.                          
-[How to pass formatOptions](https://github.com/rajatsingla/JSON-table-editor#examples-of-options-object)
-
-
-## More info on metaFields
-`metaFields` is an object which determines the meta fields, like title, description etc.                   
-There can be three types of metaFields.
-1. `string`
-```js
-{
-  type: 'string',
-  name: 'title'
-}
-```
-This will add a input box with title `title` and its value will be added in table meta.                 
-You can add multiple string type fields , use your imagination.
-
-2. `integer`
-```js
-{
-  type: 'integer',
-  name: 'Header Row Index'
-}
-```
-This will add a input box of integer type with title `Header Row Index` and its value will be added in table meta.             
-You can add multiple integer type fields , use your imagination.
-
-3. `select`
-```js
-{
-  type: 'select',
-  name: 'Is this Table Ok',
-  options: ['yes', 'no', 'whatever']
-}
-```
-This will add a select box with options and title `Is this Table Ok` and its value will be added in table meta.            
-You can add multiple select boxes , use your imagination.          
-
-[How to pass formatOptions](https://github.com/rajatsingla/JSON-table-editor#examples-of-options-object)
+[How to pass formatOptions](https://github.com/rajatsingla/JSON-table-editor#examples)
 
 ## Format of table JSON data
 ```js
 {
   "meta": {
     "rows": 2,
-    "columns": 2,
-    "title": "Politicians Age"
+    "columns": 2
   },
   "data": [
     [

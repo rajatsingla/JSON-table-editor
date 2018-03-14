@@ -10,13 +10,12 @@ JSONTable.prototype = {
     this.gridRows = options.gridRows || DEFAULTOPTIONS.gridRows
     this.gridColumns = options.gridColumns || DEFAULTOPTIONS.gridColumns
     this.formatOptions = options.formatOptions || DEFAULTOPTIONS.formatOptions
-    this.metaFields = options.metaFields || DEFAULTOPTIONS.metaFields
     this.container = JSONTable.qs(selector)
     if (!this.container) {
       throw DEFAULTOPTIONS.selectorWrongMsg
     }
     this.model = new JSONTableModel(tableData)
-    this.view = new JSONTableView(this.container, this.formatOptions, this.metaFields)
+    this.view = new JSONTableView(this.container, this.formatOptions)
     this.controller = new JSONTableController(this.view, this.model)
     this.setupTable()
   },

@@ -17,7 +17,6 @@ JSONTableController.prototype = {
       self.handleCellBlur(e)
     })
     this.bindEventOnFormatingOptions()
-    this.bindEventOnMetaFields()
   },
 
   bindEventOnCell: function (type, handler) {
@@ -39,24 +38,12 @@ JSONTableController.prototype = {
     }
   },
 
-  bindEventOnMetaFields: function () {
-    var self = this
-    JSONTable.delegate(
-      JSONTable.qs('#' + this.view.metaFieldsId, this.view.container),
-      'input, select',
-      'change',
-      function (e) {
-        self.handleMetaChange(e)
-      }
-    )
-  },
-
   handleCellFocus: function (event) {
     var self = this
     this.model.setCurrentCell(event.target.dataset)
     setTimeout(function () {
       self.view.updateFormatOptions(self.model.data[event.target.dataset.row][event.target.dataset.col].format)
-    }, 16)
+    }, 25)
   },
 
   handleCellBlur: function (event) {
@@ -69,12 +56,7 @@ JSONTableController.prototype = {
       } else {
         self.view.updateFormatOptions()
       }
-    }, 15)
-  },
-
-  handleMetaChange: function (event) {
-    this.model.updateMetaContent(event)
-    this.view.container.dispatchEvent(this.model.data_changed_event)
+    }, 24)
   },
 
   handleBtnClick: function (event) {

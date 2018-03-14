@@ -77,20 +77,6 @@ table.js-main-table td {
 }
 
 /* CELL FORMATING CSS  */
-.jt-meta-fields{
-  margin: 5px;
-  text-transform: capitalize;
-  margin-bottom: 10px;
-}
-
-.jt-meta-fields input, .jt-meta-fields select{
-  margin: 8px;
-  font-size: 14px;
-  min-height: 25px;
-  min-width: 200px;
-}
-
-/* CELL FORMATING CSS  */
 td.jt-cell-italic {
     font-style: italic;
 }
