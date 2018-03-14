@@ -43,7 +43,7 @@ JSONTableController.prototype = {
     this.model.setCurrentCell(event.target.dataset)
     setTimeout(function () {
       self.view.updateFormatOptions(self.model.data[event.target.dataset.row][event.target.dataset.col].format)
-    }, 25)
+    }, 50)
   },
 
   handleCellBlur: function (event) {
@@ -56,7 +56,7 @@ JSONTableController.prototype = {
       } else {
         self.view.updateFormatOptions()
       }
-    }, 24)
+    }, 49)
   },
 
   handleBtnClick: function (event) {
