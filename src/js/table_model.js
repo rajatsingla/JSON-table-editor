@@ -34,17 +34,19 @@ JSONTableModel.prototype = {
   },
 
   updateContent: function (event) {
-    var row = event.target.dataset.row
-    var column = event.target.dataset.col
-    this.data[row][column].content = event.target.innerHTML
+    var row = Number(event.target.dataset.row)
+    var column = Number(event.target.dataset.col)
+    if (this.data.length > row && this.data[0].length > column) {
+      this.data[row][column].content = event.target.innerHTML
+    }
   },
 
   updateContentOfCurrentCell: function () {
-    var row = this.currentCell.row
-    var column = this.currentCell.col
+    var row = Number(this.currentCell.row)
+    var column = Number(this.currentCell.col)
     var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
     var cell = JSONTable.qs(selector, this.container)
-    if (cell) {
+    if (cell && this.data.length > row && this.data[0].length > column) {
       this.data[row][column].content = cell.innerHTML
     }
   },

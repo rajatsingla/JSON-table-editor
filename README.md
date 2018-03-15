@@ -25,7 +25,7 @@ You can -
 2. Attach formatting to each cell like bold, right align, Italic etc.
 3. Initialize with JSON table data.
 4. Subscribe to content change callback.
-5. Keyboard shortcuts up, down keys, tab, reverse tab.
+5. Keyboard shortcuts up, down, left, right keys, tab, reverse tab.
 
 **USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
@@ -195,8 +195,8 @@ CSS for some of the classes is written, if you use some other options you may ha
 ```
 
 ## Keyboard shortcuts
-*   <kbd>tab</kbd> - Move to right cell by pressing tab.
-*   <kbd>shift + tab</kbd> - Move to left cell by shift + tab.
+*   <kbd>tab</kbd> or <kbd>right arrow</kbd> - Move to right cell by pressing tab.
+*   <kbd>shift + tab</kbd> or <kbd>left arrow</kbd> - Move to left cell by shift + tab.
 *   <kbd>top arrow</kbd> - Move to upper cell by pressing upper arrow.
 *   <kbd>down arrow</kbd> - Move to upper cell by pressing down arrow.
 

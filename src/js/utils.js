@@ -49,6 +49,27 @@ JSONTable.orEmpty = function (entity) {
   return entity || ''
 }
 
+JSONTable.cursorAtEndOrStart = function (el) {
+  var atStart = false, atEnd = false
+  var selRange, testRange
+  if (window.getSelection) {
+    var sel = window.getSelection()
+    if (sel.rangeCount) {
+      selRange = sel.getRangeAt(0)
+      testRange = selRange.cloneRange()
+
+      testRange.selectNodeContents(el)
+      testRange.setEnd(selRange.startContainer, selRange.startOffset)
+      atStart = (testRange.toString() === '')
+
+      testRange.selectNodeContents(el)
+      testRange.setStart(selRange.endContainer, selRange.endOffset)
+      atEnd = (testRange.toString() === '')
+    }
+  }
+  return { atStart: atStart, atEnd: atEnd }
+}
+
 // polyfill for Object.assign
 if (typeof Object.assign !== 'function') {
   // Must be writable: true, enumerable: false, configurable: true

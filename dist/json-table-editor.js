@@ -166,31 +166,41 @@ JSONTableKeyboardShortcuts.prototype = {
   init: function (view, model) {
     this.view = view
     this.model = model
-    this.bindUpKey()
-    this.bindDownKey()
+    this.bindArrowKeys()
   },
 
-  bindUpKey: function () {
+  bindArrowKeys: function () {
     var self = this
     this.view.container.addEventListener('keydown', function (event) {
-      if (event.keyCode === 38 && self.model.currentCell) {
-        self.moveArrowUpDown(-1)
+      if (self.model.currentCell && event.target.tagName === 'TD') {
+        if (event.keyCode === 37 && JSONTable.cursorAtEndOrStart(event.target).atStart) {
+          self.moveArrowLeftRight(-1)
+        } else if (event.keyCode === 38 && JSONTable.cursorAtEndOrStart(event.target).atStart) {
+          self.moveArrowUpDown(-1)
+        } else if (event.keyCode === 39 && JSONTable.cursorAtEndOrStart(event.target).atEnd) {
+          self.moveArrowLeftRight(1)
+        } else if (event.keyCode === 40 && JSONTable.cursorAtEndOrStart(event.target).atEnd) {
+          self.moveArrowUpDown(1)
+        }
       }
     })
   },
 
-  bindDownKey: function () {
-    var self = this
-    this.view.container.addEventListener('keydown', function (event) {
-      if (event.keyCode === 40 && self.model.currentCell) {
-        self.moveArrowUpDown(1)
-      }
-    })
-  },
-
-  moveArrowUpDown: function (direction, keyCode) {
+  moveArrowUpDown: function (direction) {
     var currentCell = Object.assign({}, this.model.currentCell)
     currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows) % this.model.meta.rows
+    if ((currentCell.row === 0 && direction === 1) || (currentCell.row === this.model.meta.rows - 1 && direction === -1)) {
+      currentCell.col = (Number(currentCell.col) + direction + this.model.meta.columns) % this.model.meta.columns
+    }
+    this.view.focusCurrentCell(currentCell)
+  },
+
+  moveArrowLeftRight: function (direction) {
+    var currentCell = Object.assign({}, this.model.currentCell)
+    currentCell.col = (Number(currentCell.col) + direction + this.model.meta.columns) % this.model.meta.columns
+    if ((currentCell.col === 0 && direction === 1) || (currentCell.col === this.model.meta.columns - 1 && direction === -1)) {
+      currentCell.row = (Number(currentCell.row) + direction + this.model.meta.rows) % this.model.meta.rows
+    }
     this.view.focusCurrentCell(currentCell)
   }
 }
@@ -385,17 +395,19 @@ JSONTableModel.prototype = {
   },
 
   updateContent: function (event) {
-    var row = event.target.dataset.row
-    var column = event.target.dataset.col
-    this.data[row][column].content = event.target.innerHTML
+    var row = Number(event.target.dataset.row)
+    var column = Number(event.target.dataset.col)
+    if (this.data.length > row && this.data[0].length > column) {
+      this.data[row][column].content = event.target.innerHTML
+    }
   },
 
   updateContentOfCurrentCell: function () {
-    var row = this.currentCell.row
-    var column = this.currentCell.col
+    var row = Number(this.currentCell.row)
+    var column = Number(this.currentCell.col)
     var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
     var cell = JSONTable.qs(selector, this.container)
-    if (cell) {
+    if (cell && this.data.length > row && this.data[0].length > column) {
       this.data[row][column].content = cell.innerHTML
     }
   },
@@ -655,6 +667,27 @@ JSONTable.setEndOfContenteditable = function (contentEditableElement) {
 
 JSONTable.orEmpty = function (entity) {
   return entity || ''
+}
+
+JSONTable.cursorAtEndOrStart = function (el) {
+  var atStart = false, atEnd = false
+  var selRange, testRange
+  if (window.getSelection) {
+    var sel = window.getSelection()
+    if (sel.rangeCount) {
+      selRange = sel.getRangeAt(0)
+      testRange = selRange.cloneRange()
+
+      testRange.selectNodeContents(el)
+      testRange.setEnd(selRange.startContainer, selRange.startOffset)
+      atStart = (testRange.toString() === '')
+
+      testRange.selectNodeContents(el)
+      testRange.setStart(selRange.endContainer, selRange.endOffset)
+      atEnd = (testRange.toString() === '')
+    }
+  }
+  return { atStart: atStart, atEnd: atEnd }
 }
 
 // polyfill for Object.assign
