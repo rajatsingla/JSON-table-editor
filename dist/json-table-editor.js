@@ -528,7 +528,7 @@ JSONTableController.prototype = {
         'button',
         'mousedown',
         function (e) {
-          event.preventDefault()
+          e.preventDefault()
         }
       )
     }
