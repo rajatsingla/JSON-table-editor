@@ -39,6 +39,16 @@ JSONTableModel.prototype = {
     this.data[row][column].content = event.target.innerHTML
   },
 
+  updateContentOfCurrentCell: function () {
+    var row = this.currentCell.row
+    var column = this.currentCell.col
+    var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
+    var cell = JSONTable.qs(selector, this.container)
+    if (cell) {
+      this.data[row][column].content = cell.innerHTML
+    }
+  },
+
   addARow: function () {
     this.meta.rows += 1
     this.updateDataAddRemoveExtraRowColumn()

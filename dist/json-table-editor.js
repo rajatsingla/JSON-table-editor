@@ -390,6 +390,16 @@ JSONTableModel.prototype = {
     this.data[row][column].content = event.target.innerHTML
   },
 
+  updateContentOfCurrentCell: function () {
+    var row = this.currentCell.row
+    var column = this.currentCell.col
+    var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
+    var cell = JSONTable.qs(selector, this.container)
+    if (cell) {
+      this.data[row][column].content = cell.innerHTML
+    }
+  },
+
   addARow: function () {
     this.meta.rows += 1
     this.updateDataAddRemoveExtraRowColumn()
@@ -500,6 +510,15 @@ JSONTableController.prototype = {
           self.handleBtnClick(e)
         }
       )
+
+      JSONTable.delegate(
+        JSONTable.qs('#' + btnIds[i], this.view.container),
+        'button',
+        'mousedown',
+        function (e) {
+          event.preventDefault()
+        }
+      )
     }
   },
 
@@ -508,7 +527,7 @@ JSONTableController.prototype = {
     this.model.setCurrentCell(event.target.dataset)
     setTimeout(function () {
       self.view.updateFormatOptions(self.model.data[event.target.dataset.row][event.target.dataset.col].format)
-    }, 50)
+    }, 0)
   },
 
   handleCellBlur: function (event) {
@@ -516,18 +535,11 @@ JSONTableController.prototype = {
     this.model.updateContent(event)
     this.view.container.dispatchEvent(this.model.data_changed_event)
     setTimeout(function () {
-      if (self.blur_created_by_button_click) {
-        self.blur_created_by_button_click = false
-      } else {
-        self.view.updateFormatOptions()
-      }
-    }, 49)
+      self.view.updateFormatOptions()
+    }, 0)
   },
 
   handleBtnClick: function (event) {
-    this.blur_created_by_button_click = true
-    event.preventDefault()
-    event.stopPropagation()
     var dataset = event.target.dataset
     var code = window.Number(dataset.code)
     if (code === 1) {
@@ -542,8 +554,8 @@ JSONTableController.prototype = {
       this.model.updateFormatOfCurrentCell(dataset.formatkey, event)
     }
 
+    this.model.updateContentOfCurrentCell()
     this.view.container.dispatchEvent(this.model.data_changed_event)
-
     this.view.update(this.model)
   }
 }
