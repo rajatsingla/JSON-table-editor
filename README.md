@@ -34,31 +34,42 @@ Then you can use this JSON data to show table anywhere be it web, andriod, ios, 
 Built With vanillaJS (ES5)
 
 ## Quick Start
-#### Get the file
+#### Bower
 The easiest way to use JSONTableEditor in your project is via the Bower package manager.
-`bower install json-table-editor`
+```js
+bower install json-table-editor
 
-`<script type="text/javascript" src="bower_components/json-table-editor/dist/json-table-editor.min.js"></script>`        
+<script type="text/javascript" src="bower_components/json-table-editor/dist/json-table-editor.min.js"></script>
 
-`<link rel="stylesheet" href="bower_components/json-table-editor/dist/json-table-editor.min.css" />`
+<link rel="stylesheet" href="bower_components/json-table-editor/dist/json-table-editor.min.css" />
+```
 
+#### NPM
 Also, you can download it using npm.
-`npm install json-table-editor --save`
 
-`import JSONTableEditor from 'json-table-editor'`
+```js
+npm install json-table-editor --save
 
-`@import '../../node_modules/json-table-editor/dist/json-table-editor.min.css'`
+import JSONTableEditor from 'json-table-editor'
+
+@import '../../node_modules/json-table-editor/dist/json-table-editor.min.css'
+
+```
 
 
 Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table-editor), extract it, and copy  dist/json-table-editor.min.js and dist/json-table-editor.min.css into your project’s folder.
 
 
 #### Initialize the table
-`table = new JSONTableEditor(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`
+```js
+table = new JSONTableEditor(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);
+```
 
 ## Examples
-`<div id="foobar"></div>`                
-`table = new JSONTableEditor("#foobar")`
+```js
+<div id="foobar"></div>              
+table = new JSONTableEditor("#foobar")
+```
 
 ```js
 table = new JSONTableEditor("#foobar", {
@@ -82,7 +93,9 @@ table = new JSONTableEditor("#foobar", {
 ```
 
 ## Get Data
-`table.model.tableData`
+```js
+ table.model.tableData
+```
 
 #### Attach a callback to dataChange
 ```js
