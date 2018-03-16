@@ -310,6 +310,7 @@ JSONTableView.prototype = {
   },
 
   focusCurrentCell: function (currentCell) {
+    currentCell = currentCell || {}
     var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']"
     var cell = JSONTable.qs(selector, this.container)
     if (cell) {
@@ -422,13 +423,15 @@ JSONTableModel.prototype = {
     }
   },
 
-  updateContentOfCurrentCell: function () {
-    var row = Number(this.currentCell.row)
-    var column = Number(this.currentCell.col)
-    var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
-    var cell = JSONTable.qs(selector, this.container)
-    if (cell && this.data.length > row && this.data[0].length > column) {
-      this.data[row][column].content = cell.innerHTML
+  updateContentOfCurrentCell: function (container) {
+    if (this.currentCell) {
+      var row = Number(this.currentCell.row)
+      var column = Number(this.currentCell.col)
+      var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
+      var cell = JSONTable.qs(selector, container)
+      if (cell && this.data.length > row && this.data[0].length > column) {
+        this.data[row][column].content = cell.innerHTML
+      }
     }
   },
 
@@ -586,7 +589,7 @@ JSONTableController.prototype = {
       this.model.updateFormatOfCurrentCell(dataset.formatkey, event)
     }
 
-    this.model.updateContentOfCurrentCell()
+    this.model.updateContentOfCurrentCell(this.view.container)
     this.view.container.dispatchEvent(this.model.data_changed_event)
     this.view.update(this.model)
   }

@@ -79,7 +79,7 @@ JSONTableController.prototype = {
       this.model.updateFormatOfCurrentCell(dataset.formatkey, event)
     }
 
-    this.model.updateContentOfCurrentCell()
+    this.model.updateContentOfCurrentCell(this.view.container)
     this.view.container.dispatchEvent(this.model.data_changed_event)
     this.view.update(this.model)
   }

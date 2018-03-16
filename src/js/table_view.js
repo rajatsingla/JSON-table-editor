@@ -83,6 +83,7 @@ JSONTableView.prototype = {
   },
 
   focusCurrentCell: function (currentCell) {
+    currentCell = currentCell || {}
     var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']"
     var cell = JSONTable.qs(selector, this.container)
     if (cell) {

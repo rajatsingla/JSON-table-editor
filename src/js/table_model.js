@@ -41,13 +41,15 @@ JSONTableModel.prototype = {
     }
   },
 
-  updateContentOfCurrentCell: function () {
-    var row = Number(this.currentCell.row)
-    var column = Number(this.currentCell.col)
-    var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
-    var cell = JSONTable.qs(selector, this.container)
-    if (cell && this.data.length > row && this.data[0].length > column) {
-      this.data[row][column].content = cell.innerHTML
+  updateContentOfCurrentCell: function (container) {
+    if (this.currentCell) {
+      var row = Number(this.currentCell.row)
+      var column = Number(this.currentCell.col)
+      var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
+      var cell = JSONTable.qs(selector, container)
+      if (cell && this.data.length > row && this.data[0].length > column) {
+        this.data[row][column].content = cell.innerHTML
+      }
     }
   },
 
