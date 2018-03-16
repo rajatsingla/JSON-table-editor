@@ -38,16 +38,20 @@ Built With vanillaJS (ES5)
 The easiest way to use JSONTableEditor in your project is via the Bower package manager.
 `bower install json-table-editor`
 
+`<script type="text/javascript" src="bower_components/json-table-editor/dist/json-table-editor.min.js"></script>`        
+
+`<link rel="stylesheet" href="bower_components/json-table-editor/dist/json-table-editor.min.css" />`
+
 Also, you can download it using npm.
-`npm install json-table-editor`
+`npm install json-table-editor --save`
+
+`import JSONTableEditor from 'json-table-editor'`
+
+`@import '../../node_modules/json-table-editor/dist/json-table-editor.min.css'`
+
 
 Otherwise, download the zip folder from [here](https://github.com/rajatsingla/JSON-table-editor), extract it, and copy  dist/json-table-editor.min.js and dist/json-table-editor.min.css into your project’s folder.
 
-#### Link the javascript file
-`<script type="text/javascript" src="bower_components/json-table-editor/dist/json-table-editor.min.js"></script>`        
-
-`<link rel="stylesheet" href="bower_components/json-table-editor/dist/json-table-editor.min.css" />`               
-Note: If you didn’t install using Bower, you need to adjust the path of the JS and CSS file to match your file structure.
 
 #### Initialize the table
 `table = new JSONTableEditor(<selector for container>, <Options Object (optional)>, <JSON data (optional)>);`

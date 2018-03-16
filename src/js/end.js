@@ -1,2 +1,4 @@
- window.JSONTableEditor = JSONTable
-})()
+window.JSONTableEditor = JSONTable
+
+return JSONTable
+})

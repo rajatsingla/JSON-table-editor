@@ -50,7 +50,8 @@ JSONTable.orEmpty = function (entity) {
 }
 
 JSONTable.cursorAtEndOrStart = function (el) {
-  var atStart = false, atEnd = false
+  var atStart = false
+  var atEnd = false
   var selRange, testRange
   if (window.getSelection) {
     var sel = window.getSelection()

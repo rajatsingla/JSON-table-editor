@@ -8,7 +8,27 @@ JSON table is a minimal, yet flexible HTML table editor, where you can attach fo
 @created	12-03-2018
 */
 
-(function () {
+( function( global, factory ) {
+
+	"use strict";
+
+	if ( typeof module === "object" && typeof module.exports === "object" ) {
+
+		module.exports = global.document ?
+			factory( global, true ) :
+			function( w ) {
+				if ( !w.document ) {
+					throw new Error( "JSONTableEditor requires a window with a document" );
+				}
+				return factory( w );
+			};
+	} else {
+		factory( global );
+	}
+
+// Pass this if window is not defined yet
+} )( typeof window !== "undefined" ? window : this, function( window, noGlobal ) {
+
   'use strict'
 
 var COLUMN_WIDTH = 16
@@ -670,7 +690,8 @@ JSONTable.orEmpty = function (entity) {
 }
 
 JSONTable.cursorAtEndOrStart = function (el) {
-  var atStart = false, atEnd = false
+  var atStart = false
+  var atEnd = false
   var selRange, testRange
   if (window.getSelection) {
     var sel = window.getSelection()
@@ -721,5 +742,7 @@ if (typeof Object.assign !== 'function') {
   })
 }
 
- window.JSONTableEditor = JSONTable
-})()
+window.JSONTableEditor = JSONTable
+
+return JSONTable
+})
