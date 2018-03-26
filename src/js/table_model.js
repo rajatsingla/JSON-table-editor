@@ -1,15 +1,17 @@
-function JSONTableModel (tableData) {
-  return this.init(tableData)
+function JSONTableModel (tableData, maxRows, maxColumns) {
+  return this.init(tableData, maxRows, maxColumns)
 }
 
 JSONTableModel.prototype = {
-  init: function (tableData) {
+  init: function (tableData, maxRows, maxColumns) {
     this.tableData = tableData || { meta: {}, data: [] }
     this.meta = this.tableData.meta
     this.data = this.tableData.data
     this.meta.rows = null
     this.meta.columns = null
     this.currentCell = null
+    this.maxRows = maxRows
+    this.maxColumns = maxColumns
     this.data_changed_event = new window.Event('dataChanged')
   },
 
@@ -54,8 +56,10 @@ JSONTableModel.prototype = {
   },
 
   addARow: function () {
-    this.meta.rows += 1
-    this.updateDataAddRemoveExtraRowColumn()
+    if (this.meta.rows < this.maxRows) {
+      this.meta.rows += 1
+      this.updateDataAddRemoveExtraRowColumn()
+    }
   },
 
   removeARow: function () {
@@ -66,8 +70,10 @@ JSONTableModel.prototype = {
   },
 
   addAColumn: function () {
-    this.meta.columns += 1
-    this.updateDataAddRemoveExtraRowColumn()
+    if (this.meta.columns < this.maxColumns) {
+      this.meta.columns += 1
+      this.updateDataAddRemoveExtraRowColumn()
+    }
   },
 
   removeAColumn: function () {

@@ -20,6 +20,8 @@ var DEFAULTOPTIONS = {
   ],
   gridColumns: 10,
   gridRows: 10,
+  maxColumns: 1000,
+  maxRows: 1000,
   selectorWrongMsg: 'Can\'t find html element with given selector.',
   formatOptionsId: 'jt-format-options',
   colBtnId: 'jt-col-btn',

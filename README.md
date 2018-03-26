@@ -80,8 +80,10 @@ table = new JSONTableEditor("#foobar", {
 
 ```js
 table = new JSONTableEditor("#foobar", {
-    gridColumns: 10,
+    gridColumns: 5,
     gridRows: 10,
+    maxColumns: 5,
+    maxRows: 20,
     formatOptions: [
       {
         type: 'button',
@@ -114,6 +116,14 @@ Default value is 10
 * **gridColumns**
 For defining default columns in grid.            
 Default value is 10
+
+* **maxRows**
+For limiting number of rows in table.            
+Default value is 1000
+
+* **maxColumns**
+For limiting number of columns in table.            
+Default value is 1000
 
 * **formatOptions**
 For defining format buttons on editor, like bold, underline etc.           

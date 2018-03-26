@@ -10,11 +10,19 @@ JSONTable.prototype = {
     this.gridRows = options.gridRows || DEFAULTOPTIONS.gridRows
     this.gridColumns = options.gridColumns || DEFAULTOPTIONS.gridColumns
     this.formatOptions = options.formatOptions || DEFAULTOPTIONS.formatOptions
+    this.maxRows = options.maxRows || DEFAULTOPTIONS.maxRows
+    this.maxColumns = options.maxColumns || DEFAULTOPTIONS.maxColumns
     this.container = JSONTable.qs(selector)
     if (!this.container) {
       throw DEFAULTOPTIONS.selectorWrongMsg
     }
-    this.model = new JSONTableModel(tableData)
+    if (this.gridRows > this.maxRows) {
+      throw 'gridRows exceed maxRows, check options passed'
+    }
+    if (this.gridColumns > this.maxColumns) {
+      throw 'gridColumns exceed maxColumns, check options passed'
+    }
+    this.model = new JSONTableModel(tableData, this.maxRows, this.maxColumns)
     this.view = new JSONTableView(this.container, this.formatOptions)
     this.controller = new JSONTableController(this.view, this.model)
     this.setupTable()

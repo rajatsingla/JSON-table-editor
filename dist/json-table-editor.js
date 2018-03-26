@@ -53,6 +53,8 @@ var DEFAULTOPTIONS = {
   ],
   gridColumns: 10,
   gridRows: 10,
+  maxColumns: 1000,
+  maxRows: 1000,
   selectorWrongMsg: 'Can\'t find html element with given selector.',
   formatOptionsId: 'jt-format-options',
   colBtnId: 'jt-col-btn',
@@ -250,7 +252,8 @@ JSONTableView.prototype = {
     }
     container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer())
     this.updateFormatOptions()
-    container.insertAdjacentHTML('beforeend', this.utilButtons())
+    container.insertAdjacentHTML('beforeend', this.utilButtonsContainer())
+    this.updateUtilButtons(model.meta.rows, model.meta.columns, model.maxRows, model.maxColumns)
   },
 
   update: function (model) {
@@ -258,6 +261,7 @@ JSONTableView.prototype = {
     if (model.currentCell) {
       this.focusCurrentCell(model.currentCell)
     }
+    this.updateUtilButtons(model.meta.rows, model.meta.columns, model.maxRows, model.maxColumns)
     return true
   },
 
@@ -325,19 +329,27 @@ JSONTableView.prototype = {
     return html
   },
 
-  utilButtons: function () {
+  utilButtonsContainer: function () {
     var html =
           '<div class="jt-row-btn" id="' + this.rowBtnId + '">' +
-          '<button data-code="3" title="add a row">+</button>' +
-          '<button data-code="4" title="remove a row">-</button>' +
           '</div>' +
 
           '<div class="jt-col-btn" id="' + this.colBtnId + '">' +
-          '<button data-code="1" title="add a column">+</button>' +
-          '<button data-code="2" title="remove a column">-</button>' +
           '</div>'
 
     return html
+  },
+
+  updateUtilButtons: function (rows, columns, maxRows, maxColumns) {
+    var rowBtnContainer = JSONTable.qs('#' + this.rowBtnId, this.container)
+    rowBtnContainer.innerHTML =
+      (rows < maxRows ? '<button data-code="3" title="add a row">+</button>' : '') +
+      (rows > 1 ? '<button data-code="4" title="remove a row">-</button>' : '')
+
+    var columnBtnContainer = JSONTable.qs('#' + this.colBtnId, this.container)
+    columnBtnContainer.innerHTML =
+      (columns < maxColumns ? '<button data-code="1" title="add a column">+</button>' : '') +
+      (columns > 1 ? '<button data-code="2" title="remove a column">-</button>' : '')
   },
 
   html: function (rows, columns, data) {
@@ -380,18 +392,20 @@ JSONTableView.prototype = {
   }
 }
 
-function JSONTableModel (tableData) {
-  return this.init(tableData)
+function JSONTableModel (tableData, maxRows, maxColumns) {
+  return this.init(tableData, maxRows, maxColumns)
 }
 
 JSONTableModel.prototype = {
-  init: function (tableData) {
+  init: function (tableData, maxRows, maxColumns) {
     this.tableData = tableData || { meta: {}, data: [] }
     this.meta = this.tableData.meta
     this.data = this.tableData.data
     this.meta.rows = null
     this.meta.columns = null
     this.currentCell = null
+    this.maxRows = maxRows
+    this.maxColumns = maxColumns
     this.data_changed_event = new window.Event('dataChanged')
   },
 
@@ -436,8 +450,10 @@ JSONTableModel.prototype = {
   },
 
   addARow: function () {
-    this.meta.rows += 1
-    this.updateDataAddRemoveExtraRowColumn()
+    if (this.meta.rows < this.maxRows) {
+      this.meta.rows += 1
+      this.updateDataAddRemoveExtraRowColumn()
+    }
   },
 
   removeARow: function () {
@@ -448,8 +464,10 @@ JSONTableModel.prototype = {
   },
 
   addAColumn: function () {
-    this.meta.columns += 1
-    this.updateDataAddRemoveExtraRowColumn()
+    if (this.meta.columns < this.maxColumns) {
+      this.meta.columns += 1
+      this.updateDataAddRemoveExtraRowColumn()
+    }
   },
 
   removeAColumn: function () {
@@ -607,11 +625,19 @@ JSONTable.prototype = {
     this.gridRows = options.gridRows || DEFAULTOPTIONS.gridRows
     this.gridColumns = options.gridColumns || DEFAULTOPTIONS.gridColumns
     this.formatOptions = options.formatOptions || DEFAULTOPTIONS.formatOptions
+    this.maxRows = options.maxRows || DEFAULTOPTIONS.maxRows
+    this.maxColumns = options.maxColumns || DEFAULTOPTIONS.maxColumns
     this.container = JSONTable.qs(selector)
     if (!this.container) {
       throw DEFAULTOPTIONS.selectorWrongMsg
     }
-    this.model = new JSONTableModel(tableData)
+    if (this.gridRows > this.maxRows) {
+      throw 'gridRows exceed maxRows, check options passed'
+    }
+    if (this.gridColumns > this.maxColumns) {
+      throw 'gridColumns exceed maxColumns, check options passed'
+    }
+    this.model = new JSONTableModel(tableData, this.maxRows, this.maxColumns)
     this.view = new JSONTableView(this.container, this.formatOptions)
     this.controller = new JSONTableController(this.view, this.model)
     this.setupTable()

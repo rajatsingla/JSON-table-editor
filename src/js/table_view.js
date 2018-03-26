@@ -23,7 +23,8 @@ JSONTableView.prototype = {
     }
     container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer())
     this.updateFormatOptions()
-    container.insertAdjacentHTML('beforeend', this.utilButtons())
+    container.insertAdjacentHTML('beforeend', this.utilButtonsContainer())
+    this.updateUtilButtons(model.meta.rows, model.meta.columns, model.maxRows, model.maxColumns)
   },
 
   update: function (model) {
@@ -31,6 +32,7 @@ JSONTableView.prototype = {
     if (model.currentCell) {
       this.focusCurrentCell(model.currentCell)
     }
+    this.updateUtilButtons(model.meta.rows, model.meta.columns, model.maxRows, model.maxColumns)
     return true
   },
 
@@ -98,19 +100,27 @@ JSONTableView.prototype = {
     return html
   },
 
-  utilButtons: function () {
+  utilButtonsContainer: function () {
     var html =
           '<div class="jt-row-btn" id="' + this.rowBtnId + '">' +
-          '<button data-code="3" title="add a row">+</button>' +
-          '<button data-code="4" title="remove a row">-</button>' +
           '</div>' +
 
           '<div class="jt-col-btn" id="' + this.colBtnId + '">' +
-          '<button data-code="1" title="add a column">+</button>' +
-          '<button data-code="2" title="remove a column">-</button>' +
           '</div>'
 
     return html
+  },
+
+  updateUtilButtons: function (rows, columns, maxRows, maxColumns) {
+    var rowBtnContainer = JSONTable.qs('#' + this.rowBtnId, this.container)
+    rowBtnContainer.innerHTML =
+      (rows < maxRows ? '<button data-code="3" title="add a row">+</button>' : '') +
+      (rows > 1 ? '<button data-code="4" title="remove a row">-</button>' : '')
+
+    var columnBtnContainer = JSONTable.qs('#' + this.colBtnId, this.container)
+    columnBtnContainer.innerHTML =
+      (columns < maxColumns ? '<button data-code="1" title="add a column">+</button>' : '') +
+      (columns > 1 ? '<button data-code="2" title="remove a column">-</button>' : '')
   },
 
   html: function (rows, columns, data) {
