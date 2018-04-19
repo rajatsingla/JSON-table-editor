@@ -1,5 +1,5 @@
 ## JSON Editable Table
-JSON table editor is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.
+JSON table editor is a minimal, yet flexible tabular data editor, where you can attach formatting to each cell and it gives you JSON output.
 
 ## Build status
 [![Build Status](https://travis-ci.org/rajatsingla/JSON-table-editor.svg?branch=master)](https://travis-ci.org/rajatsingla/JSON-table-editor)
@@ -18,12 +18,12 @@ Using Standard code style.
 ## Features
 It is **not** meant to be a viewer for large spreadsheet data.
 
-It is intended to maintain HTML tables and save JSON data which you can use anywhere.
+It is intended to maintain tablular data and save JSON data which you can use anywhere.
 
 You can -
 1. Edit content of each cell.
 2. Attach formatting to each cell like bold, right align, Italic etc.
-3. Initialize with JSON table data.
+3. Initialize with JSON data.
 4. Subscribe to content change callback.
 5. Keyboard shortcuts up, down, left, right keys, tab, reverse tab.
 
