@@ -21,7 +21,7 @@ var concateJS = function () {
     .pipe(order([
       'start.js',
       'constants.js',
-      'grid.js',
+      'paste.js',
       'keyboard_shortcuts.js',
       'table_view.js',
       'table_model.js',

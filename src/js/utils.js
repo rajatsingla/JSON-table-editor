@@ -12,6 +12,16 @@ JSONTable.on = function (target, type, callback, useCapture) {
   target.addEventListener(type, callback, !!useCapture)
 }
 
+JSONTable.rcs = function (row, column) {
+  var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
+  return selector
+}
+
+JSONTable.getStyle = function (element) {
+  var style = element.currentStyle || window.getComputedStyle(element)
+  return style
+}
+
 JSONTable.delegate = function (target, selector, type, handler) {
   function dispatchEvent (event) {
     var targetElement = event.target

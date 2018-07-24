@@ -19,81 +19,90 @@ JSONTableModel.prototype = {
     var data = this.data
     return data && typeof data === 'object' &&
                 data.constructor === Array &&
-                data.length && data[0].length && data[0][0].hasOwnProperty('content')
+                data.length && data[0].length &&
+                data[0][0].hasOwnProperty('content')
+  },
+
+  setRowColUtil: function (rows, columns) {
+    this.meta.rows = Number(rows)
+    this.meta.columns = Number(columns)
   },
 
   setRowCol: function () {
-    this.setRowColUtil(this.data.length, this.data[0].length)
+    var rows = this.data.length
+    var columns = this.data[0].length
+    this.setRowColUtil(rows, columns)
   },
 
   setDefaultData: function (rows, columns) {
     this.setRowColUtil(rows, columns)
-    this.updateDataAddRemoveExtraRowColumn()
+    this.addRemoveExtraRowColumn()
   },
 
-  setCurrentCell: function (cell) {
-    this.currentCell = cell
+  setCurrentCell: function (td) {
+    this.currentCell = td.dataset
   },
 
-  updateContent: function (event) {
-    var row = Number(event.target.dataset.row)
-    var column = Number(event.target.dataset.col)
-    if (this.data.length > row && this.data[0].length > column) {
-      this.data[row][column].content = event.target.innerHTML
+  getFormat: function (td) {
+    var row = Number(td.dataset.row)
+    var col = Number(td.dataset.col)
+    return this.data[row][col].format
+  },
+
+  saveContent: function (td) {
+    if (!td) { return }
+
+    var row = Number(td.dataset.row)
+    var col = Number(td.dataset.col)
+    if (this.data.length > row && this.data[0].length > col) {
+      this.data[row][col].content = td.innerHTML
     }
   },
 
-  updateContentOfCurrentCell: function (container) {
-    if (this.currentCell) {
-      var row = Number(this.currentCell.row)
-      var column = Number(this.currentCell.col)
-      var selector = "[data-row='" + String(row) + "'][data-col='" + String(column) + "']"
-      var cell = JSONTable.qs(selector, container)
-      if (cell && this.data.length > row && this.data[0].length > column) {
-        this.data[row][column].content = cell.innerHTML
+  saveFormat: function (formatButton) {
+    if (!this.currentCell) { return }
+
+    var row = this.currentCell.row
+    var col = this.currentCell.col
+    if (!(this.data.length > row && this.data[0].length > col)) { return }
+    var format = this.data[row][col].format
+    var key = formatButton.dataset.formatkey
+    var val = formatButton.dataset.radioval
+    if (!val) {
+      val = !format[key]
+    }
+    format[key] = val
+  },
+
+  handlePaste: function (tableData, target) {
+    var targetRow = Number(target.dataset.row)
+    var dataRows = tableData.length
+    var updatedRows = Math.min(Math.max(targetRow + dataRows, this.meta.rows), this.maxRows)
+    var targetColumn = Number(target.dataset.col)
+    var dataColumns = tableData[Math.floor(dataRows / 2)].length
+    var updatedColumns = Math.min(Math.max(targetColumn + dataColumns, this.meta.columns), this.maxColumns)
+    this.setDefaultData(updatedRows, updatedColumns)
+    // for first row we add default columns,
+    // because table header can be copied partially
+    while (tableData[0].length < dataColumns) {
+      tableData[0].unshift(this.defaultCellData())
+    }
+
+    for (var i = 0; i < Math.min(dataRows, this.meta.rows - targetRow); i++) {
+      for (var j = 0; j < Math.min(tableData[i].length, this.meta.columns - targetColumn); j++) {
+        this.data[targetRow + i][targetColumn + j] = tableData[i][j]
       }
     }
   },
 
-  addARow: function () {
-    if (this.meta.rows < this.maxRows) {
-      this.meta.rows += 1
-      this.updateDataAddRemoveExtraRowColumn()
-    }
+  defaultCellData: function () {
+    var data = {}
+    data.content = ''
+    data.format = {}
+    return data
   },
 
-  removeARow: function () {
-    if (this.meta.rows > 1) {
-      this.meta.rows -= 1
-      this.updateDataAddRemoveExtraRowColumn()
-    }
-  },
-
-  addAColumn: function () {
-    if (this.meta.columns < this.maxColumns) {
-      this.meta.columns += 1
-      this.updateDataAddRemoveExtraRowColumn()
-    }
-  },
-
-  removeAColumn: function () {
-    if (this.meta.columns > 1) {
-      this.meta.columns -= 1
-      this.updateDataAddRemoveExtraRowColumn()
-    }
-  },
-
-  updateFormatOfCurrentCell: function (formatkey, event) {
-    var currentCell = this.currentCell
-    if (currentCell && event.target.dataset.radioval) {
-      this.data[currentCell.row][currentCell.col].format[formatkey] = event.target.dataset.radioval
-    } else if (currentCell) {
-      var format = this.data[currentCell.row][currentCell.col].format
-      this.data[currentCell.row][currentCell.col].format[formatkey] = !format[formatkey]
-    }
-  },
-
-  updateDataAddRemoveExtraRowColumn: function () {
+  addRemoveExtraRowColumn: function () {
     var rows = window.Number(this.meta.rows)
     var columns = window.Number(this.meta.columns)
     while (this.data.length !== rows) {
@@ -119,15 +128,51 @@ JSONTableModel.prototype = {
     }
   },
 
-  setRowColUtil: function (rows, columns) {
-    this.meta.rows = Number(rows)
-    this.meta.columns = Number(columns)
+  insertaRow: function (position) {
+    var row = Number(this.currentCell.row)
+    if (this.meta.rows < this.maxRows) {
+      this.meta.rows += 1
+      this.data.splice(row + position, 0, new Array())
+      if (position === 0) {
+        this.currentCell.row = row + 1
+      }
+      this.addRemoveExtraRowColumn()
+    }
   },
 
-  defaultCellData: function () {
-    var data = {}
-    data.content = ''
-    data.format = {}
-    return data
+  removeRow: function () {
+    var row = Number(this.currentCell.row)
+    if (this.meta.rows > 1) {
+      this.meta.rows -= 1
+      this.data.splice(row, 1)
+      this.addRemoveExtraRowColumn()
+    }
+  },
+
+  insertColumn: function (position) {
+    var rows = Number(this.meta.rows)
+    var col = Number(this.currentCell.col)
+    if (this.meta.columns < this.maxColumns) {
+      this.meta.columns += 1
+      for (var i = 0; i < rows; i++) {
+        this.data[i].splice(col + position, 0, this.defaultCellData())
+      }
+      if (position === 0) {
+        this.currentCell.col = col + 1
+      }
+      this.addRemoveExtraRowColumn()
+    }
+  },
+
+  removeColumn: function () {
+    var rows = Number(this.meta.rows)
+    var col = Number(this.currentCell.col)
+    if (this.meta.columns > 1) {
+      this.meta.columns -= 1
+      for (var i = 0; i < rows; i++) {
+        this.data[i].splice(col, 1)
+      }
+      this.addRemoveExtraRowColumn()
+    }
   }
 }

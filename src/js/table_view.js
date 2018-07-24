@@ -12,15 +12,14 @@ JSONTableView.prototype = {
     this.formatOptionsId = DEFAULTOPTIONS.formatOptionsId
     this.colBtnId = DEFAULTOPTIONS.colBtnId
     this.rowBtnId = DEFAULTOPTIONS.rowBtnId
+    this.expandOptionsId = DEFAULTOPTIONS.expandOptionsId
+    this.toggleOptionsId = DEFAULTOPTIONS.toggleOptionsId
   },
 
   insert: function (model) {
     var container = this.container
-    if (container.firstChild) {
-      container.replaceChild(this.table, container.childNodes[0])
-    } else {
-      container.append(this.table)
-    }
+    container.innerHTML = ''
+    container.append(this.table)
     container.insertAdjacentHTML('afterbegin', this.formatOptionsContainer())
     this.updateFormatOptions()
     container.insertAdjacentHTML('beforeend', this.utilButtonsContainer())
@@ -36,9 +35,68 @@ JSONTableView.prototype = {
     return true
   },
 
+  getById: function (id) {
+    return JSONTable.qs('#' + id, this.container)
+  },
+
   updateFormatOptions: function (currentCellFormat) {
-    var optionsContainer = JSONTable.qs('#' + this.formatOptionsId, this.container)
+    var optionsContainer = this.getById(this.formatOptionsId)
     optionsContainer.innerHTML = this.formatButtons(currentCellFormat) + this.formatRadioButtons(currentCellFormat)
+  },
+
+  updateExpandIcons: function (cell) {
+    this.hideExpandOptions()
+    var tableStyle = JSONTable.getStyle(this.table)
+    var td = this.getTD(cell)
+
+    var marginBottom = parseFloat(tableStyle.marginBottom)
+    var tableHeight = this.table.offsetHeight
+    var tdTop = td.offsetTop
+    var tdHeight = td.offsetHeight
+    var rowBtn = this.getById(this.rowBtnId)
+    rowBtn.style.top = String(-tableHeight - marginBottom + tdTop) + 'px'
+    rowBtn.style.height = String(tdHeight) + 'px'
+    rowBtn.style.display = 'inline'
+
+    var tdLeft = td.offsetLeft
+    var tdWidth = td.offsetWidth
+    var colBtn = this.getById(this.colBtnId)
+    colBtn.style.left = String(tdLeft + 1) + 'px'
+    colBtn.style.width = String(tdWidth) + 'px'
+    colBtn.style.display = 'inline'
+  },
+
+  toggleExpandOptions: function (category) {
+    if (category === 'row') {
+      var categoryId = this.rowBtnId
+      var hideId = this.colBtnId
+    } else {
+      var categoryId = this.colBtnId
+      var hideId = this.rowBtnId
+    }
+
+    var hideOptions = this.getById(hideId)
+    var expandOptions = this.getById(categoryId)
+    expandOptions.classList.toggle('expand-options')
+    hideOptions.classList.remove('expand-options')
+  },
+
+  hideExpandOptions: function () {
+    var btnIds = [this.rowBtnId, this.colBtnId]
+    for (var i = 0; i < btnIds.length; i++) {
+      var btnContainer = this.getById(btnIds[i])
+      btnContainer.classList.remove('expand-options')
+    }
+  },
+
+  getTD: function (cell) {
+    if (!cell) { return }
+
+    var row = Number(cell.row)
+    var column = Number(cell.col)
+    var selector = JSONTable.rcs(row, column)
+    var td = JSONTable.qs(selector, this.container)
+    return td
   },
 
   formatRadioButtons: function (currentCellFormat) {
@@ -48,7 +106,7 @@ JSONTableView.prototype = {
       html += '<span>'
       for (var j = 0; j < radioButtons[i].options.length; j++) {
         var option = radioButtons[i].options[j]
-        html += '<button data-code="5" data-formatkey="' +
+        html += '<button data-code="6" data-formatkey="' +
                   radioButtons[i].name +
                   '" data-radioval="' +
                   option +
@@ -71,7 +129,7 @@ JSONTableView.prototype = {
     var html = ''
     var formatButtons = this.formatOptions.filter(function (a) { return a.type === 'button' })
     for (var i = 0; i < formatButtons.length; i++) {
-      html += '<button data-code="5" data-formatkey="' +
+      html += '<button data-code="6" data-formatkey="' +
               formatButtons[i].name +
               '" class="' +
               (currentCellFormat && currentCellFormat[formatButtons[i].name] ? ' active' : '') +
@@ -85,12 +143,10 @@ JSONTableView.prototype = {
   },
 
   focusCurrentCell: function (currentCell) {
-    currentCell = currentCell || {}
-    var selector = "[data-row='" + String(currentCell.row) + "'][data-col='" + String(currentCell.col) + "']"
-    var cell = JSONTable.qs(selector, this.container)
-    if (cell) {
-      cell.focus()
-      setTimeout(function () { JSONTable.setEndOfContenteditable(cell) }, 0)
+    var td = this.getTD(currentCell)
+    if (td) {
+      td.focus()
+      setTimeout(function () { JSONTable.setEndOfContenteditable(td) }, 0)
     }
   },
 
@@ -107,20 +163,27 @@ JSONTableView.prototype = {
 
           '<div class="jt-col-btn" id="' + this.colBtnId + '">' +
           '</div>'
-
     return html
   },
 
   updateUtilButtons: function (rows, columns, maxRows, maxColumns) {
-    var rowBtnContainer = JSONTable.qs('#' + this.rowBtnId, this.container)
+    var rowBtnContainer = this.getById(this.rowBtnId)
     rowBtnContainer.innerHTML =
-      (rows < maxRows ? '<button data-code="3" title="add a row">+</button>' : '') +
-      (rows > 1 ? '<button data-code="4" title="remove a row">-</button>' : '')
+      '<span id="' + this.toggleOptionsId + '"><i class="jt-left-arrow"></i></span>' +
+      '<div class="jt-expand-options" id="' + this.expandOptionsId + '">' +
+      (rows < maxRows ? '<button data-code="3">Insert above</button>' : '') +
+      (rows < maxRows ? '<button data-code="4">Insert below</button>' : '') +
+      (rows > 1 ? '<button data-code="5" style="color:red;">Delete row</button>' : '') +
+      '</div>'
 
-    var columnBtnContainer = JSONTable.qs('#' + this.colBtnId, this.container)
+    var columnBtnContainer = this.getById(this.colBtnId)
     columnBtnContainer.innerHTML =
-      (columns < maxColumns ? '<button data-code="1" title="add a column">+</button>' : '') +
-      (columns > 1 ? '<button data-code="2" title="remove a column">-</button>' : '')
+      '<span id="' + this.toggleOptionsId + '"><i class="jt-up-arrow"></i></span>' +
+      '<div class="jt-expand-options" id="' + this.expandOptionsId + '">' +
+      (columns < maxColumns ? '<button data-code="0">Insert before</button>' : '') +
+      (columns < maxColumns ? '<button data-code="1">Insert after</button>' : '') +
+      (columns > 1 ? '<button data-code="2" style="color:red;">Delete column</button>' : '') +
+      '</div>'
   },
 
   html: function (rows, columns, data) {

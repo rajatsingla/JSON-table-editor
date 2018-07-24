@@ -1,18 +1,4 @@
 /* jt stands for JSON table */
-/* GRID CSS  */
-.jt-grid--cell {
-    width: 16px;
-    height: 16px;
-    background: rgba(155, 155, 155, 0.1);
-    display: block;
-    float: left;
-    box-sizing: border-box;
-    border: 1px solid #312828;
-}
-
-.jt-grid--cell.active {
-    background: #9b9b9b;
-}
 
 /* TABLE CSS  */
 table.js-main-table {
@@ -23,15 +9,15 @@ table.js-main-table {
 }
 
 table.js-main-table td {
-    border: 1px solid black;
+    border: 1px solid #a2a9b1;
     height: 30px;
     outline: none;
     padding-left: 5px;
     padding-right: 5px;
 }
 
-/* TABLE BUTTON CSS  */
-.jt-format-options button, .jt-col-btn button, .jt-row-btn button {
+/* TABLE FORMAT BUTTON CSS  */
+.jt-format-options button {
     margin: 4px;
     font-size: 16px;
     border: 1px solid #e2e2e2;
@@ -45,35 +31,124 @@ table.js-main-table td {
     background-color: white;
 }
 
-.jt-format-options button:hover, .jt-col-btn button:hover, .jt-row-btn button:hover{
+.jt-format-options button:hover {
     background: rgba(224, 224, 224, 0.5);
 }
 
-.jt-format-options button:disabled, .jt-format-options button[disabled]{
+.jt-format-options button:disabled, .jt-format-options button[disabled] {
     opacity: .4;
 }
 
-.jt-format-options span{
+.jt-format-options span {
     padding-left: 20px;
 }
 
-.jt-format-options span button{
+.jt-format-options span button {
     margin-left: -4px;
     border-radius: 0;
 }
 
-.jt-format-options button.active, .jt-col-btn button.active, .jt-row-btn button.active {
+.jt-format-options button.active {
     background: #e0e0e0;
 }
 
+/* TABLE EXPAND BUTTON CSS  */
 .jt-col-btn, .jt-row-btn {
-    display: inline;
-    float: right;
+    display: none;
 }
 
 .jt-row-btn {
+    float: right;
     position: relative;
     top: -45px;
+    left: -46px;
+}
+
+.jt-col-btn{
+    float: left;
+    position: relative;
+    top: -3px;
+}
+
+.jt-col-btn span, .jt-row-btn span {
+  display: block;
+  background-color: #dbeafd;
+  text-align: center;
+  cursor: pointer;
+}
+
+.jt-col-btn span {
+  height: 14px;
+}
+
+.jt-row-btn span {
+  height: 100%;
+  width: 14px;
+}
+
+.jt-expand-options {
+  position: absolute;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.25);
+  width: 133px;
+  background: white;
+  z-index: 100;
+  display: none;
+}
+
+.jt-row-btn .jt-expand-options {
+  right: 14px;
+  bottom: 50%;
+  transform: translateY(50%);
+  -webkit-transform: translateY(50%);
+}
+
+.jt-col-btn .jt-expand-options {
+  bottom: 14px;
+  right: 50%;
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+}
+
+.jt-row-btn.expand-options .jt-expand-options, .jt-col-btn.expand-options .jt-expand-options {
+  display: block;
+}
+
+.jt-expand-options button{
+  margin: 0;
+  padding: 7px;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: sans-serif;
+  font-weight: 700;
+  width: 100%;
+  height: 40px;
+  border-bottom: 1px solid #eaecf1;
+  background: white;
+}
+
+/* JSON table arrow CSS  */
+.jt-up-arrow, .jt-left-arrow {
+  border: solid #282c30;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+}
+
+.jt-up-arrow{
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.jt-left-arrow{
+  position: relative;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-85%) rotate(135deg);
+  -webkit-transform: translateY(-85%) rotate(135deg);
 }
 
 /* CELL FORMATING CSS  */
