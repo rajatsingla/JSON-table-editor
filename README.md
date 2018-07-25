@@ -24,8 +24,10 @@ You can -
 1. Edit content of each cell.
 2. Attach formatting to each cell like bold, right align, Italic etc.
 3. Initialize with JSON data.
-4. Subscribe to content change callback.
+4. Subscribe to content-change callback.
 5. Keyboard shortcuts up, down, left, right keys, tab, reverse tab.
+6. Paste table data from another website or excel sheet.
+7. Insert rows and columns in between table.
 
 **USE CASE-** Just to attach formatting information to each cell and content of each cell.
 Then you can use this JSON data to show table anywhere be it web, andriod, ios, shell etc.
@@ -73,15 +75,13 @@ table = new JSONTableEditor("#foobar")
 
 ```js
 table = new JSONTableEditor("#foobar", {
-    gridColumns: 10,
-    gridRows: 10
-  })
+  defaultRows: 3,
+  defaultColumns: 3
+})
 ```
 
 ```js
 table = new JSONTableEditor("#foobar", {
-    gridColumns: 5,
-    gridRows: 10,
     maxColumns: 5,
     maxRows: 20,
     formatOptions: [
@@ -109,13 +109,13 @@ table.view.container.addEventListener('dataChanged',function(){
 ## Options Object
 Options Object can have following keys
 
-* **gridRows**
-For defining default rows in grid.             
-Default value is 10
+* **defaultRows**
+Default number of rows in table to start with.            
+Default value is 3
 
-* **gridColumns**
-For defining default columns in grid.            
-Default value is 10
+* **defaultColumns**
+Default number of columns in table to start with.            
+Default value is 3
 
 * **maxRows**
 For limiting number of rows in table.            

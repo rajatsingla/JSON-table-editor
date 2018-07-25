@@ -1,6 +1,6 @@
 {
   "name": "json-table-editor",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "JSON table editor is a minimal, yet flexible HTML table editor, where you can attach formatting to each cell and it gives you JSON output.",
   "main": "dist/json-table-editor.min.js",
   "scripts": {
@@ -17,7 +17,9 @@
     "JSON",
     "json-table",
     "json-table-editor",
-    "editable"
+    "editable",
+    "visual-table-editor",
+    "wikimedia"
   ],
   "author": "rajat singla",
   "license": "ISC",
