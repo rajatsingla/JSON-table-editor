@@ -34,7 +34,7 @@
 
 
   <script type="text/javascript" charset="utf-8">
-      var table = new JSONTableEditor("#editable",{maxColumns:15,maxRows:15});
+      var table = new JSONTableEditor("#editable",{maxColumns:15000,maxRows:15000});
 
       table.view.container.addEventListener('dataChanged',function(){document.getElementById('prettyprint').innerHTML=JSON.stringify(table.model.tableData,undefined,2)})
   </script>
